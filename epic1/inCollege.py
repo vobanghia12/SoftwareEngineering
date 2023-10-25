@@ -169,13 +169,6 @@ def initialScreen():
         print("Invalid. Please choose a valid option of either '1' or '2'.\n")
         initialScreen()
 
-
-# define main funciton to start initial screen
-def main():
-    initialScreen()
-
-
 # call main
 if __name__ == '__main__':
-    main()
-
+    initialScreen()
