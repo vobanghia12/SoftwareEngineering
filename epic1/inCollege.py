@@ -6,25 +6,27 @@ Fall '23
 # dictionary with key as username password as the value
 ALL_STUDENT_ACCOUNTS = {}
 
+# boolean to check if logged in
+IsLoggedIn = false
 
 # function for creating an account
 def createAccount():
+    
     username = input("Enter a unique username: ")
-    if checkUniqueUsername(username) == True:
+    while(checkUniqueUsername(username) == True):
         print("Username is already claimed. Please choose another one.\n")
-        createAccount()
-        return
+        username = input("Enter a unique username: ")
 
     password = input("Enter a secure password: ")
-    if checkValidPassword(password) == False:
+    while(checkValidPassword(password) == False):
         print("Invalid password. Password must be 8-12 characters long, contain at least one capital letter, one digit,"
               " and one special character.\n")
-        createAccount()
-        return
-
+        password = input("Enter a secure password: ")
+        
     # key and value being set in dictionary
     ALL_STUDENT_ACCOUNTS[username] = password
     print("Account has been created!\n")
+    return username
 
 
 # function checks if user is in the dictionary and checks corresponding password returns true if found
@@ -33,6 +35,22 @@ def checkUser(username, password):
         return True
     else:
         return False
+
+
+# function for login, returns null if exited or returns username if successfully logged in
+def login():
+    username = input("Enter username: ")
+    password = input("Enter password: ")
+
+    while checkUser(username, password) != true:
+        userChoice = input("Incorrect username/password. Press '1' to try again, or press anything else to exit: ")
+        if userChoice == '1':
+            username = input("Enter username: ")
+            password = input("Enter password: ")
+        else
+            return
+            
+    return username
 
 
 # function checks if username is unique in the dictionary
@@ -78,6 +96,70 @@ def find():
     return
 
 
+#useful links function
+def usefulLinks():
+    print("1. General")
+    print("2. Browse InCollege")
+    print("3. Business Solutions")
+    print("4. Directories")
+    print("5. Return to previous menu")
+
+    #user input to choose option
+    userChoice = input("Select an option with '1' through '5': ")
+
+    #menu for useful links options
+    if userChoice =='1':
+        
+        usefulLinks()
+    elif userChoice =='2':
+        print("under construction")
+        usefulLinks()
+    elif userChoice =='3':
+        print("under construction")
+        usefulLinks()
+    elif userChoice =='4':
+        print("under construction")
+        usefulLinks()
+    elif userChoice =='5':
+        return
+    else:
+        Print("Invalid. Please choose an option with '1' through '5'")
+        usefulLinks()
+
+
+# general menu
+def generalMenu():
+    print("1. Help Center")
+    print("2. About")
+    print("3. Press")
+    print("4. Blog")
+    print("5. Careers")
+    print("6. Developers")
+    print("7. Return to previous menu")
+
+    #user input to choose option
+    userChoice = input("Select an option with '1' through '5': ")
+
+    #menu for useful links options
+    if userChoice =='1':
+        
+        usefulLinks()
+    elif userChoice =='2':
+        print("under construction")
+        usefulLinks()
+    elif userChoice =='3':
+        print("under construction")
+        usefulLinks()
+    elif userChoice =='4':
+        print("under construction")
+        usefulLinks()
+    elif userChoice =='5':
+        return
+    else:
+        Print("Invalid. Please choose an option with '1' through '5'")
+        usefulLinks()
+
+
 # Learn a new skill option
 def learningNewSkill():
     print("1. Python")
@@ -114,7 +196,10 @@ def learningNewSkill():
 
 
 # function for when the user is logged in
-def loggedinScreen():
+def loggedinScreen(username):
+    # set isLoggedIn Boolean to true
+        isLoggedIn = True
+    
     # other submenu would go here
     print("")
     print("1. Search for a job")
@@ -128,20 +213,20 @@ def loggedinScreen():
     # Option menu:
     if optionChoice == '1':
         jobSearch()
-        loggedinScreen()
-        return
+        loggedinScreen(username)
     elif optionChoice == '2':
         find()
-        loggedinScreen()
+        loggedinScreen(username)
     elif optionChoice == '3':
         learningNewSkill()
-        loggedinScreen()
+        loggedinScreen(username)
     elif optionChoice == '4':
         print("\nYou have successfully logged out\n")
+        isLoggedIn = False
         return
     else:
         print("Invalid. Please choose a valid option of either '1', '2', or '3'.\n")
-        loggedinScreen()
+        loggedinScreen(username)
 
 
 # function for the first screen the user sees
@@ -152,15 +237,10 @@ def initialScreen():
     userChoice = input("Select an option with '1' or '2': ")
     # logging in
     if userChoice == '1':
-        username = input("Enter username: ")
-        password = input("Enter password: ")
-        if checkUser(username, password):
-            print("You have successfully logged in.\n")
-            loggedinScreen()
-            initialScreen()
-        else:
-            print("Incorrect username/password. Please try again.\n")
-            initialScreen()
+        username = login()
+        if login is not None:
+            loggedinScreen(username)
+        initialScreen()
     # create account
     elif userChoice == '2':
         # check if account limit reached
@@ -168,8 +248,8 @@ def initialScreen():
             print("Sorry, all permitted accounts have been created. Please come back later.\n")
             initialScreen()
         else:
-            createAccount()
-            loggedinScreen()
+            username = createAccount()
+            loggedinScreen(username)
             initialScreen()
     else:
         print("Invalid. Please choose a valid option of either '1' or '2'.\n")
