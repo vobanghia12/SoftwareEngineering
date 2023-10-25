@@ -69,13 +69,13 @@ def checkValidPassword(password):
 # Job search/Internship Option
 def jobSearch():
     print("\nunder construction\n")
-    loggedinScreen()
+    return
 
 
 # Find someone you know option
 def find():
     print("\nunder construction\n")
-    loggedinScreen()
+    return
 
 
 # Learn a new skill option
@@ -107,7 +107,7 @@ def learningNewSkill():
         print("\nunder construction\n")
         learningNewSkill()
     elif userChoice == '6':
-        loggedinScreen()
+        return
     else:
         print("Invalid. Please choose a valid option with '1' through '6'.\n")
         learningNewSkill()
@@ -128,13 +128,17 @@ def loggedinScreen():
     # Option menu:
     if optionChoice == '1':
         jobSearch()
+        loggedinScreen()
+        return
     elif optionChoice == '2':
         find()
+        loggedinScreen()
     elif optionChoice == '3':
         learningNewSkill()
+        loggedinScreen()
     elif optionChoice == '4':
         print("\nYou have successfully logged out\n")
-        initialScreen()
+        return
     else:
         print("Invalid. Please choose a valid option of either '1', '2', or '3'.\n")
         loggedinScreen()
@@ -153,6 +157,7 @@ def initialScreen():
         if checkUser(username, password):
             print("You have successfully logged in.\n")
             loggedinScreen()
+            initialScreen()
         else:
             print("Incorrect username/password. Please try again.\n")
             initialScreen()
@@ -165,17 +170,12 @@ def initialScreen():
         else:
             createAccount()
             loggedinScreen()
+            initialScreen()
     else:
         print("Invalid. Please choose a valid option of either '1' or '2'.\n")
         initialScreen()
 
-
-# define main funciton to start initial screen
-def main():
-    initialScreen()
-
-
 # call main
 if __name__ == '__main__':
-    main()
+    initialScreen()
 
