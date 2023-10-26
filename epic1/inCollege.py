@@ -47,7 +47,7 @@ def login():
         if userChoice == '1':
             username = input("Enter username: ")
             password = input("Enter password: ")
-        else
+        else:
             return
             
     return username
@@ -96,6 +96,60 @@ def find():
     return
 
 
+#Important links function
+def importantLinks():
+    print("1. A Copyright Notice")
+    print("2. About")
+    print("3. Accessibility")
+    print("4.  User Agreement")
+    print("5. Privacy Policy")
+    print("6. Cookie Policy")
+    print("7. Copyright Policy")
+    print("8. Brand Policy")
+    print("9. Guest Controls")
+    print("10. Languages")
+    print("11. return to previous menu")
+
+    userChoice = input("Select an option with '1' through '11': ")
+
+    if userChoice == '1':
+        print("\nunder construction\n")
+        importantLinks()
+    if userChoice == '2':
+        print("\nunder construction\n")
+        importantLinks()
+    if userChoice == '3':
+        print("\nunder construction\n")
+        importantLinks()
+    if userChoice == '4':
+        print("\nunder construction\n")
+        importantLinks()
+    if userChoice == '5':
+        print("\nunder construction\n")
+        importantLinks()
+    if userChoice == '6':
+        print("\nunder construction\n")
+        importantLinks()
+    if userChoice == '7':
+        print("\nunder construction\n")
+        importantLinks()
+    if userChoice == '8':
+        print("\nunder construction\n")
+        importantLinks()
+    if userChoice == '9':
+        print("\nunder construction\n")
+        importantLinks()
+    if userChoice == '10':
+        print("\nunder construction\n")
+        importantLinks()
+    if userChoice == '11':
+        return
+    else:
+        Print("Invalid. Please choose an option with '1' through '11'")
+        importantLinks()
+
+
+
 #useful links function
 def usefulLinks():
     print("1. General")
@@ -108,19 +162,19 @@ def usefulLinks():
     userChoice = input("Select an option with '1' through '5': ")
 
     #menu for useful links options
-    if userChoice =='1':
-        
+    if userChoice == '1':
+        generalMenu
         usefulLinks()
-    elif userChoice =='2':
-        print("under construction")
+    elif userChoice == '2':
+        print("\nunder construction\n")
         usefulLinks()
-    elif userChoice =='3':
-        print("under construction")
+    elif userChoice == '3':
+        print("\nunder construction\n")
         usefulLinks()
-    elif userChoice =='4':
-        print("under construction")
+    elif userChoice == '4':
+        print("\nunder construction\n")
         usefulLinks()
-    elif userChoice =='5':
+    elif userChoice == '5':
         return
     else:
         Print("Invalid. Please choose an option with '1' through '5'")
@@ -136,28 +190,47 @@ def generalMenu():
     print("5. Careers")
     print("6. Developers")
     print("7. Return to previous menu")
+    if IsLoggedIn == False:
+        print("8. Sign up")
 
     #user input to choose option
-    userChoice = input("Select an option with '1' through '5': ")
+    if IsLoggedIn == False:
+        userChoice = input("Select an option with '1' through '8': ")
+
+    elif IsLoggedIn == True:
+        userChoice = input("Select an option with '1' through '7': ")
 
     #menu for useful links options
-    if userChoice =='1':
-        
-        usefulLinks()
-    elif userChoice =='2':
-        print("under construction")
-        usefulLinks()
-    elif userChoice =='3':
-        print("under construction")
-        usefulLinks()
-    elif userChoice =='4':
-        print("under construction")
-        usefulLinks()
-    elif userChoice =='5':
+    if userChoice == '1':
+        generalMenu()
+    elif userChoice == '2':
+        print("InCollege was created by a group of college students in order to" 
+              "help other college students connect and look for jobs.")
+        generalMenu()
+    elif userChoice == '3':
+        print("\nunder construction\n")
+        generalMenu()
+    elif userChoice == '4':
+        print("\nunder construction\n")
+        generalMenu()
+    elif userChoice == '5':
+        print("\nunder construction\n")
+        generalMenu()
+    elif userChoice == '6':
+        print("\nunder construction\n")
+        generalMenu()
+    elif userChoice == '7':
         return
+    elif IsLoggedIn == False and userChoice == '8':
+        initialScreen()
+
+
     else:
-        Print("Invalid. Please choose an option with '1' through '5'")
-        usefulLinks()
+        if IsLoggedIn == True:
+            Print("Invalid. Please choose an option with '1' through '7'")
+        if IsLoggedIn == False:
+            Print("Invalid. Please choose an option with '1' through '8'")
+        generalMenu()
 
 
 # Learn a new skill option
@@ -198,10 +271,10 @@ def learningNewSkill():
 # function for when the user is logged in
 def loggedinScreen(username):
     # set isLoggedIn Boolean to true
-        isLoggedIn = True
+    isLoggedIn = True
     
     # other submenu would go here
-    print("")
+    print(" ")
     print("1. Search for a job")
     print("2. Find someone you know")
     print("3. Learn a new skill")
