@@ -101,7 +101,7 @@ def importantLinks():
     print("1. A Copyright Notice")
     print("2. About")
     print("3. Accessibility")
-    print("4.  User Agreement")
+    print("4. User Agreement")
     print("5. Privacy Policy")
     print("6. Cookie Policy")
     print("7. Copyright Policy")
@@ -163,7 +163,7 @@ def usefulLinks():
 
     #menu for useful links options
     if userChoice == '1':
-        generalMenu
+        generalMenu()
         usefulLinks()
     elif userChoice == '2':
         print("\nunder construction\n")
@@ -222,9 +222,24 @@ def generalMenu():
     elif userChoice == '7':
         return
     elif IsLoggedIn == False and userChoice == '8':
-        initialScreen()
-
-
+        print("1. Login")
+        print("2. Create a new account")
+        loginChoice = input("Choose an option with '1' or '2': ")
+        if loginChoice == '1':
+            username = login()
+            if login is not None:
+                loggedinScreen(username)
+            initialScreen()
+        # create account
+        elif loginChoice == '2':
+        # check if account limit reached
+            if len(ALL_STUDENT_ACCOUNTS) >= 5:
+                print("Sorry, all permitted accounts have been created. Please come back later.\n")
+                initialScreen()
+            else:
+                username = createAccount()
+                loggedinScreen(username)
+                initialScreen()
     else:
         if IsLoggedIn == True:
             Print("Invalid. Please choose an option with '1' through '7'")
@@ -278,36 +293,46 @@ def loggedinScreen(username):
     print("1. Search for a job")
     print("2. Find someone you know")
     print("3. Learn a new skill")
-    print("4. log out")
+    print("4. View Useful Links")
+    print("5. View InCollege Important Links")
+    print("6. log out")
 
     # User choose an option
-    optionChoice = input("Select an option with '1', '2', '3', or '4': ")
+    userChoice = input("Select an option with '1', through '6': ")
 
     # Option menu:
-    if optionChoice == '1':
+    if userChoice == '1':
         jobSearch()
         loggedinScreen(username)
-    elif optionChoice == '2':
+    elif userChoice == '2':
         find()
         loggedinScreen(username)
-    elif optionChoice == '3':
+    elif userChoice == '3':
         learningNewSkill()
         loggedinScreen(username)
-    elif optionChoice == '4':
+    elif userChoice == '4':
+        usefulLinks()
+        loggedinScreen(username)
+    elif userChoice == '5':
+        importantLinks()
+        loggedinScreen(username)
+    elif userChoice == '6':
         print("\nYou have successfully logged out\n")
         isLoggedIn = False
         return
     else:
-        print("Invalid. Please choose a valid option of either '1', '2', or '3'.\n")
+        print("Invalid. Please choose a valid option with '1', through '6'.\n")
         loggedinScreen(username)
 
 
 # function for the first screen the user sees
 def initialScreen():
     print("\nWelcome to InCollege!\n")
-    print("1.Login")
-    print("2.Create a new account")
-    userChoice = input("Select an option with '1' or '2': ")
+    print("1. Login")
+    print("2. Create a new account")
+    print("3. View Useful Links")
+    print("4. View InCollege Important Links")
+    userChoice = input("Select an option with '1' through '4': ")
     # logging in
     if userChoice == '1':
         username = login()
@@ -324,11 +349,16 @@ def initialScreen():
             username = createAccount()
             loggedinScreen(username)
             initialScreen()
+    elif userChoice == '3':
+        usefulLinks()
+        initialScreen()
+    elif userChoice == '4':
+        importantLinks()
+        initialScreen()
     else:
-        print("Invalid. Please choose a valid option of either '1' or '2'.\n")
+        print("Invalid. Please choose a valid option with '1' through '4'.\n")
         initialScreen()
 
 # call main
 if __name__ == '__main__':
     initialScreen()
-
