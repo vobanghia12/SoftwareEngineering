@@ -5,99 +5,129 @@ from contextlib import redirect_stdout
 import mock
 from unittest.mock import patch
 
+#test showmynetwork() and find() function
+
 class TestInCollege(unittest.TestCase):
-    #test createAccount() with valid username and password
-    @patch('builtins.input', side_effect=['new_username', 'Nghiavo555@'])
-    def test_createAccount_valid_username_and_password(self, mock_input):
-        expected_output = "Account has been created!"
+    #test user in the system when not logged in
+    @patch('inCollege.globalUsername', None)
+    @patch('builtins.input', side_effect=['Nghia', 'Vo'])
+    @patch('inCollege.ALL_STUDENT_ACCOUNTS', {"wyoming44":{"lastName":"Vo", "firstName":"Nghia"}})
+    def testUserInTheSystemWhenNotLoggedIn(self, mock_input):
+        expected_output = "They are a part of the InCollege system."
         out = io.StringIO()
         with redirect_stdout(out):
-            createAccount()
-        self.assertEqual(out.getvalue().strip(), expected_output)
-        self.assertEqual(ALL_STUDENT_ACCOUNTS, {'new_username': 'Nghiavo555@'})
-
-    #test createAccount() with invalid password
-    @patch('builtins.input', side_effect=['new_username', 'Nghiavo'])
-    def test_createAccount_invalid_password(self, mock_input):
-        #when password is wrong, it would prompt createAccount() again
-        with mock.patch('inCollege.createAccount') as mocked_createAccount:
-            createAccount()
-            mocked_createAccount.assert_called_once()
-
-    #test createAccount() with invalid username
-    @patch('builtins.input', side_effect=['wyoming', 'Nghiavo555@'])
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS', {"wyoming":"Wyoming0917@"})
-    def test_createAccount_invalid_username(self, mock_input):
-        #when password is wrong, it would prompt createAccount() again
-        with mock.patch('inCollege.createAccount') as mocked_createAccount:
-            createAccount()
-            mocked_createAccount.assert_called_once()
-
-    #test check user existence
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS', {"wyoming":"Wyoming0917@"})
-    def test_checkUser_existence(self):
-        self.assertEqual(checkUser("wyoming", "Wyoming0917@"), True)
-        self.assertEqual(checkUser("wyo", "Wyoming0917@"), False)
-
-    #test check unique username
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS', {"wyoming":"Wyoming0917@"})
-    def test_checkUniqueUsername(self):
-        self.assertEqual(checkUniqueUsername("wyoming"), True)
-        self.assertEqual(checkUniqueUsername("monkeyDLuffy"), False)
-
-    #test check valid password
-    def test_checkValidPassword(self):
-        password = "Nghiavo555@"
-        self.assertEqual(checkValidPassword(password), True)
-
-    #test check invalid password
-    def test_checkInvalidPassword(self):
-        password = "123"
-        self.assertEqual(checkValidPassword(password), False)
-
-    #test jobSearch() option
-    @patch('builtins.input', side_effect=['1'])
-    def test_jobSearch_called(self, mock_input):
-        with mock.patch('inCollege.jobSearch') as mocked_jobSearch:
-            jobSearch()
-            mocked_jobSearch.assert_called_once()
-
-    #test find() option
-    @patch('builtins.input', side_effect=['2'])
-    def test_findOption_called(self, mock_input):
-        with mock.patch('inCollege.find') as mocked_find:
             find()
-            mocked_find.assert_called_once()
+        self.assertEqual(out.getvalue().strip(), expected_output)
 
-    #test learningNewSkill() option
-    @patch('builtins.input', side_effect=['3'])
-    def test_learningNewSkillOption_called(self, mock_input):
-        with mock.patch('inCollege.learningNewSkill') as mocked_learningNewSkill:
-            learningNewSkill()
-            mocked_learningNewSkill.assert_called_once()
+    #test user not in the system when not logged in
+    @patch('inCollege.globalUsername', None)
+    @patch('builtins.input', side_effect=['Nghia', 'Vo'])
+    @patch('inCollege.ALL_STUDENT_ACCOUNTS', {"wyoming44":{"lastName":"Vo", "firstName":"Jason"}})
+    def testUserNotInTheSystemWhenNotLoggedIn(self, mock_input):
+        expected_output = "They are not a part of the InCollege system yet."
+        out = io.StringIO()
+        with redirect_stdout(out):
+            find()
+        self.assertEqual(out.getvalue().strip(), expected_output)
 
-    #test initialScreen() option
-    @patch('builtins.input', side_effect=['4'])
-    def test_initialScreenOption_called(self, mock_input):
-        with mock.patch('inCollege.initialScreen') as mocked_initialScreen:
-            initialScreen()
-            mocked_initialScreen.assert_called_once()
+    #test user logged in and search by last name but not found
+    @patch('inCollege.globalUsername', 'epic4coming')
+    @patch('builtins.input', side_effect=['1', 'Wong'])
+    @patch('inCollege.ALL_STUDENT_ACCOUNTS', {"wyoming44":{"lastName":"Vo", "firstName":"Jason"}})
+    def testUserLoggedInAndSearchByLastName_notFound(self, mock_input):
+        expected_output = "No one was found with that last name"
+        out = io.StringIO()
+        with redirect_stdout(out):
+            find()
+        value = expected_output in out.getvalue().strip()
+        assert value == True
 
-    #test check non-existing option
-    @patch('builtins.input', side_effect=['5'])
-    def test_otherOptions_called(self, mock_input):
-        with mock.patch('inCollege.loggedinScreen') as mocked_otherOptions:
-            loggedinScreen()
-            mocked_otherOptions.assert_called_once()
+    #test user logged in and search by last name and found, but wrong digit number when look up
+    @patch('inCollege.globalUsername', 'epic4coming')
+    @patch('builtins.input', side_effect=['1', 'Vo', '-1'])
+    @patch('inCollege.ALL_STUDENT_ACCOUNTS', {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS"}})
+    def testUserLoggedInAndSearchByLastName_found_wrongDigitNumber(self, mock_input):
+        expected_output = "0. Jason Vo, SJSU, CS"
+        out = io.StringIO()
+        with redirect_stdout(out):
+            find()
+        value = expected_output in out.getvalue().strip()
+        assert value == True
 
-    #test login successful
-    @patch('builtins.input', side_effect=['1', 'testuser', 'testpass'])
-    def test_login_successful(self, mock_input):
-        with mock.patch("inCollege.loggedinScreen") as loggedinScreen:
-                with mock.patch('inCollege.checkUser', return_value=True):
-                    loggedinScreen()
-                    loggedinScreen.assert_called_once()
+    #test user logged in and search by last name and found, but accurate digit number when look up
+    @patch('inCollege.globalUsername', 'wyoming55')
+    @patch('builtins.input', side_effect=['1', 'Vo','0'])
+    def testUserLoggedInAndSearchByLastName_found_rightDigitNumber(self, mock_input):
+        out = io.StringIO()
+        with mock.patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}}) as mocked_find:
+            find()
+            assert mocked_find['wyoming44']['requests'] == ['wyoming55']
 
+
+    #test user logged in and search by university and not found
+    @patch('inCollege.globalUsername', 'wyoming55')
+    @patch('builtins.input', side_effect=['2', 'USF'])
+    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}})
+    def testUserLoggedInAndSearchByUniversity_notFound(self, mock_input):
+        expected_output = "No one was found in that university"
+        out = io.StringIO()
+        with redirect_stdout(out):
+            find()
+        self.assertTrue(expected_output in out.getvalue().strip())
+
+    #test user logged in and search by university and found and enter wrong digit number
+    @patch('inCollege.globalUsername', 'wyoming55')
+    @patch('builtins.input', side_effect=['2', 'SJSU', "-1"])
+    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"USF","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}})
+    def testUserLoggedInAndSearchByUniversity_Found_butWrongDigitNumber(self, mock_input):
+        expected_output = "0. Jason Vo, SJSU, CS"
+        out = io.StringIO()
+        with redirect_stdout(out):
+            find()
+        self.assertTrue(expected_output in out.getvalue().strip())
+
+    #test user logged in and search by university and found and enter right digit number
+    @patch('inCollege.globalUsername', 'wyoming55')
+    @patch('builtins.input', side_effect=['2', 'SJSU', "0"])
+    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"USF","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}})
+    def testUserLoggedInAndSearchByUniversity_Found_butRightDigitNumber(self, mock_input):
+        out = io.StringIO()
+        with mock.patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"USF","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}}) as mocked_find:
+            find()
+            assert mocked_find['wyoming44']['requests'] == ['wyoming55']
+
+    #test user logged in and search by major and not found
+    @patch('inCollege.globalUsername', 'wyoming55')
+    @patch('builtins.input', side_effect=['3', 'Business Analytics'])
+    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CSE", 'requests': []}})
+    def testUserLoggedInAndSearchByMajor_notFound(self, mock_input):
+        expected_output = "No one was found with that major"
+        out = io.StringIO()
+        with redirect_stdout(out):
+            find()
+        self.assertTrue(expected_output in out.getvalue().strip())
+
+    #test user logged in and search by major and found with wrong digit number
+    @patch('inCollege.globalUsername', 'wyoming55')
+    @patch('builtins.input', side_effect=['3', 'CS', '-1'])
+    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}})
+    def testUserLoggedInAndSearchByMajor_notFound_wrongDigit(self, mock_input):
+        expected_output = "0. Jason Vo, SJSU, CS"
+        out = io.StringIO()
+        with redirect_stdout(out):
+            find()
+        self.assertTrue(expected_output in out.getvalue().strip())
+
+
+    #test user logged in and search by major and found with right digit number
+    @patch('inCollege.globalUsername', 'wyoming55')
+    @patch('builtins.input', side_effect=['3', 'CS', '0'])
+    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}})
+    def testUserLoggedInAndSearchByMajor_Found_RightDigit(self, mock_input):
+        out = io.StringIO()
+        with mock.patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}}) as mocked_find:
+            find()
+            assert mocked_find['wyoming44']['requests'] == ['wyoming55']
 
 if __name__ == '__main__':
     unittest.main()

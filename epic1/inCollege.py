@@ -10,6 +10,8 @@ ALL_JOBS = {}
 # global variable to track current user (also used to check if user is logged in or not)
 globalUsername = None
 
+searchList = []
+
 
 # function for creating an account
 def createAccount():
@@ -219,16 +221,17 @@ def find():
                     major = ALL_STUDENT_ACCOUNTS[username]['major']
                     # print first and last name as well as university and major
                     print(f'{index}. {first_name} {last_name}, {university}, {major}')
-                
+
                 print("Enter the number of a person to send a friend request, or enter anything else to exit")
                 friendChoice = input("Enter here: ")
 
+
                 # check if friendChoice is a digit in the range of shown users
-                if friendChoice.isdigit() and friendChoice in range(0, len(searchList) - 1):
+                if friendChoice.isdigit() and int(friendChoice) in range(0, len(searchList)):
                     # set index to int version of friendChoice and use as index to look in list
                     index = int(friendChoice)
                     # sets receivingUser to the username stored in searchList and add to users friend request list
-                    receivingUser = searchList[index][1]
+                    receivingUser = searchList[index]
                     ALL_STUDENT_ACCOUNTS[receivingUser]['requests'].append(globalUsername)
                 else:
                     return
@@ -254,12 +257,13 @@ def find():
                 print("Enter the number of a person to send a friend request, or enter anything else to exit")
                 friendChoice = input("Enter here: ")
 
+
                # check if friendChoice is a digit in the range of shown users
-                if friendChoice.isdigit() and friendChoice in range(0, len(searchList) - 1):
+                if friendChoice.isdigit() and int(friendChoice) in range(0, len(searchList)):
                     # set index to int version of friendChoice and use as index to look in list
                     index = int(friendChoice)
                     # sets receivingUser to the username stored in searchList and add to users friend request list
-                    receivingUser = searchList[index][1]
+                    receivingUser = searchList[index]
                     ALL_STUDENT_ACCOUNTS[receivingUser]['requests'].append(globalUsername)
                 else:
                     return
@@ -284,11 +288,11 @@ def find():
                 friendChoice = input("Enter here: ")
 
                 # check if friendChoice is a digit in the range of shown users
-                if friendChoice.isdigit() and friendChoice in range(0, len(searchList) - 1):
+                if friendChoice.isdigit() and int(friendChoice) in range(0, len(searchList) - 1):
                     # set index to int version of friendChoice and use as index to look in list
                     index = int(friendChoice)
                     # sets receivingUser to the username stored in searchList and add to users friend request list
-                    receivingUser = searchList[index][1]
+                    receivingUser = searchList[index]
                     ALL_STUDENT_ACCOUNTS[receivingUser]['requests'].append(globalUsername)
                 else:
                     return
@@ -547,7 +551,7 @@ def showMyNetwork():
     print("3. Return to previous menu")
 
     userChoice = input("Select an option with '1', '2', or '3': ")
-    
+
     if userChoice == '1':
         # search for each friend request
         for requester in ALL_STUDENT_ACCOUNTS[globalUsername]['requests']:
@@ -561,7 +565,7 @@ def showMyNetwork():
             requestChoice = input("Enter 1 to accept the request or 2 to deny: ")
             while requestChoice != '1' or requestChoice != '2':
                 requestChoice = input("Invalid input, Enter 1 to accept the request or 2 to deny: ")
-            
+
             if requestChoice == '1':
                 # add requester to the current users list of friends
                 ALL_STUDENT_ACCOUNTS[globalUsername]['friends'].append(requester)
@@ -571,14 +575,14 @@ def showMyNetwork():
                 ALL_STUDENT_ACCOUNTS[requester]['friends'].append(globalUsername)
                 print(f'You have successfully added {requester_firstName} as a friend!')
 
-            elif requestChoice == '2': 
+            elif requestChoice == '2':
                 # only remove requester from list of friend requests
                 ALL_STUDENT_ACCOUNTS[globalUsername]['requests'].remove(requester)
                 print(f'You have denied a friend request from {requester_firstName}')
         showMyNetwork()
-        
-    
-    elif userChoice == '2': 
+
+
+    elif userChoice == '2':
         # create list to add friends into
         friendList = []
 
@@ -598,7 +602,7 @@ def showMyNetwork():
                     major = ALL_STUDENT_ACCOUNTS[username]['major']
                     # print first and last name as well as university and major
                     print(f'{index}. {first_name} {last_name}, {university}, {major}')
-                
+
                 print("Enter the number of a friend to disconnect from them, or type exit to leave")
                 friendChoice = input("Enter here: ")
 
@@ -617,7 +621,7 @@ def showMyNetwork():
     else:
         print("Invalid Input, Select an option with '1', '2', or '3'")
         showMyNetwork()
-        
+
 
 
 
@@ -660,7 +664,7 @@ def learningNewSkill():
 
 # function for the marketing before the user login
 def preLoggedInScreen():
-    print("Success story: Congratulations!!! A USF student has successfully landed an " 
+    print("Success story: Congratulations!!! A USF student has successfully landed an "
     "internship for the Summer 2024 with the help of InCollege!\n")
     print("Select one of the following options:")
     print("1. Find out why you would want to join InCollege")
@@ -704,7 +708,7 @@ def loggedinScreen(username):
     print("4. View Useful Links")
     print("5. View InCollege Important Links")
     print("6. Show my network")
-    print("6. log out")
+    print("7. log out")
 
     # User choose an option
     userChoice = input("Select an option with '1', through '7': ")
