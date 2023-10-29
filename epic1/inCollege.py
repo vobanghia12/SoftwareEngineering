@@ -32,15 +32,27 @@ def createAccount():
     while lastName is None:
         lastName = input("Invalid, Enter your last name: ")
 
+    university = input("Enter your university: ")
+    while university is None:
+        university = input("Invalid, Enter your university: ")
+
+    major = input("Enter your major: ")
+    while major is None:
+        major = input("Invalid, Enter your major: ")
+
     # Key is the username, value is password, firstName, and lastName
     ALL_STUDENT_ACCOUNTS[username] = {
         'password': password,
         'firstName': firstName,
         'lastName': lastName,
+        'university': university,
+        'major': major,
         'Language': 'English',
         'SMS': True,
         'Email': True,
-        'Advertising': True
+        'Advertising': True,
+        'friends': [],
+        'requests': []
     }
 
     print("Account has been created!\n")
@@ -109,7 +121,7 @@ def postJob():
     employer = input("Employer's name: ")
     location = input("Job's location: ")
     salary = input("Job's salary: ")
-    poster = ALL_STUDENT_ACCOUNTS[globalUsername]['firstName'] + ' ' +ALL_STUDENT_ACCOUNTS[globalUsername]['lastName']
+    poster = ALL_STUDENT_ACCOUNTS[globalUsername]['firstName'] + ' ' + ALL_STUDENT_ACCOUNTS[globalUsername]['lastName']
 
     if len(ALL_JOBS) >= 5:
         print("Sorry, all permitted jobs have been created. Please come back later.\n")
@@ -151,16 +163,112 @@ def jobSearch():
 
 # Find someone you know option
 def find():
-    firstName = input("First Name: ")
-    lastName = input("Last Name: ")
+    # if user is not logged in
+    if globalUsername is None:
+        firstName = input("First Name: ")
+        lastName = input("Last Name: ")
 
-    for i in ALL_STUDENT_ACCOUNTS:
-        if firstName == i.firstName and lastName == i.lastName:
-            print("They are a part of the InCollege system.\n")
+        for username in ALL_STUDENT_ACCOUNTS:
+            if firstName == ALL_STUDENT_ACCOUNTS[username]['firstName'] and lastName == ALL_STUDENT_ACCOUNTS[username]['lastName']:
+                print("They are a part of the InCollege system.\n")
+                return
+
+        print("They are not a part of the InCollege system yet.\n")
+        return
+    # if user is logged in, allows for sending friend requests
+    elif globalUsername is not None:
+        
+        #list to add found users
+        searchList = []
+
+        print("1. Search for a user by Last Name")
+        print("2. Search for a user by University")
+        print("3. Search for a user by Major")
+        print("4. Return to previous menu")
+
+        # take user input
+        userChoice = input("Choose and option with '1', through '4': ")
+
+        if userChoice == '1':
+            lName = input("Enter the last name of the user you want to search for: ")
+            for username in ALL_STUDENT_ACCOUNTS:
+                if lName == ALL_STUDENT_ACCOUNTS[username]['lastName']:
+                    searchList.append(username)
+            
+            if not searchList:
+                print("No one was found with that last name")
+            else:
+                # print each found user
+                for index, username in enumerate(searchList):
+                    last_name = ALL_STUDENT_ACCOUNTS[username]['lastName']
+                    first_name = ALL_STUDENT_ACCOUNTS[username]['firstName']
+                    university = ALL_STUDENT_ACCOUNTS[username]['university']
+                    major = ALL_STUDENT_ACCOUNTS[username]['major']
+                    print(f'{index}. {first_name} {last_name}, {university}, {major}')
+
+                print("Enter the number of a person to send a friend request, or enter anything else to exit")
+                friendChoice = input("Enter here: ")
+                if friendChoice.isdigit() and friendchoice in range(0, len(searchList)-1):
+                    receivingUser = searchList[friendChoice][1]
+                    ALL_STUDENT_ACCOUNTS[username]['requests'].append(receivingUser)
+                else:
+                    return
+
+
+        elif userChoice == '2':
+            University = input("Enter the University of the user you want to search for: ")
+            for username in ALL_STUDENT_ACCOUNTS:
+                if University == ALL_STUDENT_ACCOUNTS[username]['university']:
+                    searchList.append(username)
+            
+            if not searchList:
+                print("No one was found in that university")
+            else:
+                # print each found user
+                for index, username in enumerate(searchList):
+                    last_name = ALL_STUDENT_ACCOUNTS[username]['lastName']
+                    first_name = ALL_STUDENT_ACCOUNTS[username]['firstName']
+                    university = ALL_STUDENT_ACCOUNTS[username]['university']
+                    major = ALL_STUDENT_ACCOUNTS[username]['major']
+                    print(f'{index}. {first_name} {last_name}, {university}, {major}')
+
+                print("Enter the number of a person to send a friend request, or enter anything else to exit")
+                friendChoice = input("Enter here: ")
+                if friendChoice.isdigit() and friendchoice in range(0, len(searchList)-1):
+                    receivingUser = searchList[friendChoice][1]
+                    ALL_STUDENT_ACCOUNTS[username]['requests'].append(receivingUser)
+                else:
+                    return
+        elif userChoice == '3':
+            Major = input("Enter the Major of the user you want to search for: ")
+            for username in ALL_STUDENT_ACCOUNTS:
+                if University == ALL_STUDENT_ACCOUNTS[username]['major']:
+                    searchList.append(username)
+            
+            if not searchList:
+                print("No one was found with that major")
+            else:
+                # print each found user
+                for index, username in enumerate(searchList):
+                    last_name = ALL_STUDENT_ACCOUNTS[username]['lastName']
+                    first_name = ALL_STUDENT_ACCOUNTS[username]['firstName']
+                    university = ALL_STUDENT_ACCOUNTS[username]['university']
+                    major = ALL_STUDENT_ACCOUNTS[username]['major']
+                    print(f'{index}. {first_name} {last_name}, {university}, {major}')
+
+                print("Enter the number of a person to send a friend request, or enter anything else to exit")
+                friendChoice = input("Enter here: ")
+                if friendChoice.isdigit() and friendchoice in range(0, len(searchList)-1):
+                    receivingUser = searchList[friendChoice][1]
+                    ALL_STUDENT_ACCOUNTS[username]['requests'].append(receivingUser)
+        elif userChoice == '4':
             return
+        else:
+            print("Invalid, please choose an option with '1', through '4'")
+            find()
 
-    print("They are not yet a part of the InCollege system yet.\n")
-    return
+
+
 
 
 # Important links function
@@ -375,7 +483,7 @@ def generalMenu():
         # create account
         elif loginChoice == '2':
         # check if account limit reached
-            if len(ALL_STUDENT_ACCOUNTS) > 5:
+            if len(ALL_STUDENT_ACCOUNTS) > 10:
                 print("Sorry, all permitted accounts have been created. Please come back later.\n")
                 initialScreen()
             else:
