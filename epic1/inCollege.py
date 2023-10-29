@@ -5,9 +5,10 @@ Fall '23
 
 # dictionary with key as username password as the value
 ALL_STUDENT_ACCOUNTS = {}
+ALL_JOBS = {}
 
-# boolean to check if logged in
-IsLoggedIn = false
+# global variable to track current user
+global globalUsername = None
 
 # function for creating an account
 def createAccount():
@@ -23,15 +24,32 @@ def createAccount():
               " and one special character.\n")
         password = input("Enter a secure password: ")
         
-    # key and value being set in dictionary
-    ALL_STUDENT_ACCOUNTS[username] = password
+    firstName = input("Enter your first name: ")
+    while firstName is None:    
+        firstName = input("Invalid, Enter your first name: ")
+
+    lastName = input("Enter your last name: ")
+    while lastName is None:
+        lastName = input("Invalid, Enter your last name: ")
+
+    # Key is the username, value is password, firstName, and lastName
+    ALL_STUDENT_ACCOUNTS[username] = {
+        'password': password,
+        'firstName': firstName,
+        'lastName': lastName,
+        'Language': 'English',
+        'SMS': True,
+        'Email': True,
+        'Advertising': True
+    }
+
     print("Account has been created!\n")
     return username
 
 
 # function checks if user is in the dictionary and checks corresponding password returns true if found
 def checkUser(username, password):
-    if username in ALL_STUDENT_ACCOUNTS and ALL_STUDENT_ACCOUNTS[username] == password:
+    if username in ALL_STUDENT_ACCOUNTS and ALL_STUDENT_ACCOUNTS[username]['password'] == password:
         return True
     else:
         return False
@@ -84,19 +102,66 @@ def checkValidPassword(password):
         return False
 
 
+# Fuction for Posting a job
+def postJob():
+    title = input("Job's title: ")
+    description = input("Job's description: ")
+    employer = input("Employer's name: ")
+    location = input("Job's location: ")
+    salary = input("Job's salary: ")
+
+    if len(ALL_JOBS) >= 5:
+        print("Sorry, all permitted jobs have been created. Please come back later.\n")
+        return
+    else:
+        ALL_JOBS[title] = {
+            'description': description,
+            'employer': employer,
+            'location': location,
+            'salary': salary,
+        }
+
+        return
+
+
 # Job search/Internship Option
 def jobSearch():
-    print("\nunder construction\n")
-    return
+    print("1. Search for a job/internship")
+    print("2. Post a job/internship")
+    print("3. Return to main menu")
+
+    # User choose an option
+    userChoice = input("Select an option with '1', '2', or '3': ")
+
+    # Option menu:
+    if userChoice == '1':
+        print("\nunder construction\n")
+        jobSearch()
+    elif userChoice == '2':
+        postJob()
+        jobSearch()
+    elif userChoice == '3':
+        return
+    else:
+        print("Invalid. Please choose a valid option of either '1', '2', or '3'.\n")
+        jobSearch()
 
 
 # Find someone you know option
 def find():
-    print("\nunder construction\n")
+    firstName = input("First Name: ")
+    lastName = input("Last Name: ")
+
+    for i in ALL_STUDENT_ACCOUNTS:
+        if firstName == i.firstName and lastName == i.lastName:
+            print("They are a part of the InCollege system.\n")
+            return
+
+    print("They are not yet a part of the InCollege system yet.\n")
     return
 
 
-#Important links function
+# Important links function
 def importantLinks():
     print("1. A Copyright Notice")
     print("2. About")
@@ -106,51 +171,125 @@ def importantLinks():
     print("6. Cookie Policy")
     print("7. Copyright Policy")
     print("8. Brand Policy")
-    print("9. Guest Controls")
-    print("10. Languages")
-    print("11. return to previous menu")
+    print("9. return to previous menu")
+    if globalUsername is not None:
+        print("10. Languages")
+    
+    # user input to choose option
+    if globalUsername is None:
+        userChoice = input("Select an option with '1' through '9': ")
+    elif globalUsername is not None:
+        userChoice = input("Select an option with '1' through '10': ")
 
-    userChoice = input("Select an option with '1' through '11': ")
-
+    
+    # menu for important links
     if userChoice == '1':
-        print("\nunder construction\n")
+        print("InCollege © copyright-2023")
         importantLinks()
-    if userChoice == '2':
-        print("\nunder construction\n")
+    elif userChoice == '2':
+        print("InCollege aims to help students connect with each other and find jobs")
         importantLinks()
-    if userChoice == '3':
-        print("\nunder construction\n")
+    elif userChoice == '3':
+        print("InCollege works to ensure easy access to all users")
         importantLinks()
-    if userChoice == '4':
-        print("\nunder construction\n")
+    elif userChoice == '4':
+        print("By creating an account with InCollege, you automatically agree to our terms and services")
         importantLinks()
-    if userChoice == '5':
-        print("\nunder construction\n")
+    elif userChoice == '5':
+        print("InCollege ensures that user data will not be disclosed to unauthorized parties")
+        
+        #check if user is logged in using global variable
+        if globalUsername is not None:
+            privacyChange()
         importantLinks()
-    if userChoice == '6':
-        print("\nunder construction\n")
+    elif userChoice == '6':
+        print("We use cookies to enhance our overall user experience")
         importantLinks()
-    if userChoice == '7':
-        print("\nunder construction\n")
+    elif userChoice == '7':
+        print("We Reserve the right to use the InCollege © name and logo")
         importantLinks()
-    if userChoice == '8':
-        print("\nunder construction\n")
+    elif userChoice == '8':
+        print("Our brand policy is to ensure easy access to work opportunities to all students")
         importantLinks()
-    if userChoice == '9':
-        print("\nunder construction\n")
-        importantLinks()
-    if userChoice == '10':
-        print("\nunder construction\n")
-        importantLinks()
-    if userChoice == '11':
+    elif userChoice == '9':
         return
-    else:
-        Print("Invalid. Please choose an option with '1' through '11'")
+    
+    # change language if user is logged in
+    elif globalUsername is not None and userChoice == '10':
+        languageChange()
         importantLinks()
+    else:
+        if globalUsername is None:
+            Print("Invalid. Please choose an option with '1' through '9'")
+
+        elif globalUsername is not None:
+            Print("Invalid. Please choose an option with '1' through '10'")
+    importantLinks()
 
 
+# function to change language
+def languageChange():
+    print("1. Set language to English")
+    print("2. Set Language to Spanish")
+    print("3. Return to previous menu")
+    languageChoice = input("Choose an option with '1' or '2': ")
 
-#useful links function
+    if languageChoice == '1':
+        ALL_STUDENT_ACCOUNTS[globalUsername]['Language'] = 'English'
+        print("Language set to English")
+        languageChange()
+    elif languageChoice == '2':
+        ALL_STUDENT_ACCOUNTS[globalUsername]['Language'] = 'Spanish'
+        print("Language set to Spanish")
+        languageChange()
+    else
+        return
+
+
+# function for changing privacy options
+def privacyChange():
+            print("1. Turn on InCollege Email")
+            print("2. Turn off InCollege Email")
+            print("3. Turn on SMS")
+            print("4. Turn off SMS")
+            print("5. Turn on Targeted Advertising Features")
+            print("6. Turn off Targeted Advertising Features")
+            print("7. return to previous")
+
+            # user input for privacy options
+            privacyChoice = input("Select an option with '1' through '7': ")
+            if privacyChoice == '1':
+                ALL_STUDENT_ACCOUNTS[globalUsername]['Email'] = True
+                print("Email turned on")
+                privacyChange()
+            elif privacyChoice == '2':
+                ALL_STUDENT_ACCOUNTS[globalUsername]['Email'] = False
+                print("Email turned off")
+                privacyChange()
+            elif privacyChoice == '3':
+                ALL_STUDENT_ACCOUNTS[globalUsername]['SMS'] = True
+                print("SMS turned on")
+                privacyChange()
+            elif privacyChoice == '4':
+                ALL_STUDENT_ACCOUNTS[globalUsername]['SMS'] = False
+                print("SMS turned off")
+                privacyChange()
+            elif privacyChoice == '5':
+                ALL_STUDENT_ACCOUNTS[globalUsername]['Advertising'] = True
+                print("Targeted Advertising turned on")
+                privacyChange()
+            elif privacyChoice == '6':
+                ALL_STUDENT_ACCOUNTS[globalUsername]['Advertising'] = False
+                print("Targeted Advertising turned off")
+                privacyChange()
+            elif privacyChoice == '7':
+                return
+            else:
+                print("Invalid, please choose an option with '1' through '7'")
+                privacyChange()
+            
+
+# useful links function
 def usefulLinks():
     print("1. General")
     print("2. Browse InCollege")
@@ -158,10 +297,10 @@ def usefulLinks():
     print("4. Directories")
     print("5. Return to previous menu")
 
-    #user input to choose option
+    # user input to choose option
     userChoice = input("Select an option with '1' through '5': ")
 
-    #menu for useful links options
+    # menu for useful links options
     if userChoice == '1':
         generalMenu()
         usefulLinks()
@@ -193,22 +332,23 @@ def generalMenu():
     if IsLoggedIn == False:
         print("8. Sign up")
 
-    #user input to choose option
+    # user input to choose option
     if IsLoggedIn == False:
         userChoice = input("Select an option with '1' through '8': ")
 
     elif IsLoggedIn == True:
         userChoice = input("Select an option with '1' through '7': ")
 
-    #menu for useful links options
+    # menu for general options
     if userChoice == '1':
+        print("We're here to help")
         generalMenu()
     elif userChoice == '2':
-        print("InCollege was created by a group of college students in order to" 
-              "help other college students connect and look for jobs.")
+        print("In College: Welcome to In College, the world's largest college student" 
+              "network with many users in many countries and territories worldwide")
         generalMenu()
     elif userChoice == '3':
-        print("\nunder construction\n")
+        print("In College Pressroom: Stay on top of the latest news, updates, and reports")
         generalMenu()
     elif userChoice == '4':
         print("\nunder construction\n")
@@ -221,7 +361,7 @@ def generalMenu():
         generalMenu()
     elif userChoice == '7':
         return
-    elif IsLoggedIn == False and userChoice == '8':
+    elif globalUsername is None and userChoice == '8':
         print("1. Login")
         print("2. Create a new account")
         loginChoice = input("Choose an option with '1' or '2': ")
@@ -233,7 +373,7 @@ def generalMenu():
         # create account
         elif loginChoice == '2':
         # check if account limit reached
-            if len(ALL_STUDENT_ACCOUNTS) >= 5:
+            if len(ALL_STUDENT_ACCOUNTS) > 5:
                 print("Sorry, all permitted accounts have been created. Please come back later.\n")
                 initialScreen()
             else:
@@ -241,9 +381,9 @@ def generalMenu():
                 loggedinScreen(username)
                 initialScreen()
     else:
-        if IsLoggedIn == True:
+        if globalUsername is not None:
             Print("Invalid. Please choose an option with '1' through '7'")
-        if IsLoggedIn == False:
+        if globalUsername is None:
             Print("Invalid. Please choose an option with '1' through '8'")
         generalMenu()
 
@@ -283,10 +423,38 @@ def learningNewSkill():
         learningNewSkill()
 
 
+#function for the marketing before the user login
+def preLoggedInScreen():
+    print("Success story: Congratulations!!! A USF student has successfully landed an internship for the Summer 2024 with the help of InCollege!\n")
+    print("Select one of the following options:")
+    print("1. Find out why you would want to join InCollege")
+    print("2. Find out who has joined InCollege")
+    print("3. Login into your account")
+    print("4. Return to the previous screen")
+
+    userChoice = input("Select an option with '1', '2', '3', or '4': ")
+
+    if userChoice == "1":
+        print("Video is now playing")
+    elif userChoice == "2":
+        find()
+        preLoggedInScreen()
+    elif userChoice == "3":
+        username = login()
+        if login is not None:
+            loggedinScreen(username)
+            preLoggedInScreen()
+    elif userChoice == "4":
+        return
+    else:
+        print("Invalid. Please select one of the following options: '1', '2', '3', or '4'.\n")
+        preLoggedInScreen()
+
+
 # function for when the user is logged in
 def loggedinScreen(username):
     # set isLoggedIn Boolean to true
-    isLoggedIn = True
+    globalUsername = username
     
     # other submenu would go here
     print(" ")
@@ -318,7 +486,7 @@ def loggedinScreen(username):
         loggedinScreen(username)
     elif userChoice == '6':
         print("\nYou have successfully logged out\n")
-        isLoggedIn = False
+        globalUsername = None
         return
     else:
         print("Invalid. Please choose a valid option with '1', through '6'.\n")
@@ -335,14 +503,12 @@ def initialScreen():
     userChoice = input("Select an option with '1' through '4': ")
     # logging in
     if userChoice == '1':
-        username = login()
-        if login is not None:
-            loggedinScreen(username)
+        preLoggedInScreen()
         initialScreen()
     # create account
     elif userChoice == '2':
         # check if account limit reached
-        if len(ALL_STUDENT_ACCOUNTS) >= 5:
+        if len(ALL_STUDENT_ACCOUNTS) > 5:
             print("Sorry, all permitted accounts have been created. Please come back later.\n")
             initialScreen()
         else:
