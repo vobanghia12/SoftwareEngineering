@@ -226,7 +226,6 @@ def find():
                 print("Enter the number of a person to send a friend request, or enter anything else to exit")
                 friendChoice = input("Enter here: ")
 
-
                 # check if friendChoice is a digit in the range of shown users
                 if friendChoice.isdigit() and int(friendChoice) in range(0, len(searchList)):
                     # set index to int version of friendChoice and use as index to look in list
@@ -258,8 +257,7 @@ def find():
                 print("Enter the number of a person to send a friend request, or enter anything else to exit")
                 friendChoice = input("Enter here: ")
 
-
-               # check if friendChoice is a digit in the range of shown users
+                # check if friendChoice is a digit in the range of shown users
                 if friendChoice.isdigit() and int(friendChoice) in range(0, len(searchList)):
                     # set index to int version of friendChoice and use as index to look in list
                     index = int(friendChoice)
@@ -561,7 +559,8 @@ def showMyNetwork():
             requester_lastName = ALL_STUDENT_ACCOUNTS[requester]['lastName']
             requester_university = ALL_STUDENT_ACCOUNTS[requester]['university']
             # print details of friend request
-            print(f'{requester_firstName} {requester_lastName} from {requester_university} has sent you a friend request')
+            print(
+                f'{requester_firstName} {requester_lastName} from {requester_university} has sent you a friend request')
 
             requestChoice = input("Enter 1 to accept the request or 2 to deny: ")
             while requestChoice != '1' or requestChoice != '2':
@@ -588,8 +587,8 @@ def showMyNetwork():
         friendList = []
 
         for friend in ALL_STUDENT_ACCOUNTS[globalUsername]['friends']:
-                friendList.append(friend)
-            # true if friendList is empty
+            friendList.append(friend)
+        # true if friendList is empty
         if not friendList:
             print("You have not added any friends yet")
         else:
@@ -624,69 +623,71 @@ def showMyNetwork():
         showMyNetwork()
 
 
-#function to view friend's profiles
+# function to view friend's profiles
 def viewFriendsProfiles():
     # create list to add friends into
-        friendList = []
+    friendList = []
 
-        for friend in ALL_STUDENT_ACCOUNTS[globalUsername]['friends']:
-                friendList.append(friend)
-        # true if friendList is empty
-        if not friendList:
-            print("You have not added any friends yet")
-            return
+    for friend in ALL_STUDENT_ACCOUNTS[globalUsername]['friends']:
+        friendList.append(friend)
+    # true if friendList is empty
+    if not friendList:
+        print("You have not added any friends yet")
+        return
 
-        # if user has friends
-        elif friendList:
-            # variable to keep track of number of friends
-            num = 1
-            for friend in friendList:
-                # add friends first and last name to variable
-                friend_name = ALL_STUDENT_ACCOUNTS[friend]['firstName'] + ' ' + ALL_STUDENT_ACCOUNTS[friend]['lastName']
-                print(f'{num}. {friend_name}')
-                num += 1
+    # if user has friends
+    elif friendList:
+        # variable to keep track of number of friends
+        num = 1
+        for friend in friendList:
+            # add friends first and last name to variable
+            friend_name = ALL_STUDENT_ACCOUNTS[friend]['firstName'] + ' ' + ALL_STUDENT_ACCOUNTS[friend]['lastName']
+            print(f'{num}. {friend_name}')
+            num += 1
 
-            # user input to choose a friend
-            print("Enter the friends number to see their profile or press anything else to exit")
-            viewChoice = input("Enter Here: ")
-
-            if viewChoice >= 1 and viewChoice <= len(friendList)+1:
+        # user input to choose a friend
+        print("Enter the friends number to see their profile or press anything else to exit")
+        viewChoice = input("Enter Here: ")
+        # check if input is number and convert to int in index
+        if viewChoice.isdigit():
+            index = int(viewChoice)-1
+            # check if index is in valid range
+            if index >= 0 and index <= len(friendList):
                 # variable to store friends name
-                friend_username = friendList[viewChoice-1]
+                friend_username = friendList[index]
                 if friend_username in ALL_PROFILES:
-                    friend_name = ALL_STUDENT_ACCOUNTS[friend_username]['firstName'] + ' ' + ALL_STUDENT_ACCOUNTS[friend_username]['lastName']
+                    friend_name = ALL_STUDENT_ACCOUNTS[friend_username]['firstName'] + ' ' + \
+                              ALL_STUDENT_ACCOUNTS[friend_username]['lastName']
 
-                    print(f'{first_name} {last_name}\'s Profile:\n')
+                    print(f'{friend_name}\'s Profile:\n')
 
-                    print(f'Title: {ALL_PROFILES[friend_username]['title']}')
-                    print(f'Major: {ALL_PROFILES[friend_username]['major']}')
-                    print(f'University: {ALL_PROFILES[friend_username]['university']}')
-                    print(f'About: {ALL_PROFILES[friend_username]['about']}')
-                    print(f'Education: {ALL_PROFILES[friend_username]['education']}')
+                    print(f"Title: {ALL_PROFILES[friend_username]['title']}")
+                    print(f"Major: {ALL_PROFILES[friend_username]['major']}")
+                    print(f"University: {ALL_PROFILES[friend_username]['university']}")
+                    print(f"About: {ALL_PROFILES[friend_username]['about']}")
+                    print(f"Education: {ALL_PROFILES[friend_username]['education']}")
 
                     # use for loop to print each job
-                    for i in range(len(ALL_PROFILES[globalUsername]['job_title'][i])):
-
-                        # variable to store job number
-                        n = i+1
+                    for i in range(len(ALL_PROFILES[globalUsername]['job_title'])):
+                    # variable to store job number
+                        x = i
+                        n = i + 1
                         # Access and print the job attributes
-                        print(f"Job number {n} Title: {ALL_PROFILES[friend_username]['job_title'][i]}")
-                        print(f"Employer: {ALL_PROFILES[friend_username]['job_employer'][i]}")
-                        print(f"Start Date: {ALL_PROFILES[friend_username]['job_date_start'][i]}")
-                        print(f"End Date: {ALL_PROFILES[friend_username]['job_date_end'][i]}")
-                        print(f"Location: {ALL_PROFILES[friend_username]['job_location'][i]}")
-                        print(f"Description: {ALL_PROFILES[friend_username]['job_description'][i]}")
+                        print(f"Job number {n} Title: {ALL_PROFILES[friend_username]['job_title'][x]}")
+                        print(f"Employer: {ALL_PROFILES[friend_username]['job_employer'][x]}")
+                        print(f"Start Date: {ALL_PROFILES[friend_username]['job_date_start'][x]}")
+                        print(f"End Date: {ALL_PROFILES[friend_username]['job_date_end'][x]}")
+                        print(f"Location: {ALL_PROFILES[friend_username]['job_location'][x]}")
+                        print(f"Description: {ALL_PROFILES[friend_username]['job_description'][x]}")
                         print("\n")
-                elif friend_username not in ALL_PROFILES
+
+                elif friend_username not in ALL_PROFILES:
                     print("That friend has not made a profile yet")
-            viewFriendsProfiles()
-            
-            else:
-                print("Invalid Input")
-                viewFriendsProfiles()
+                    viewFriendsProfiles()
 
-
-
+                else:
+                    print("Invalid Input")
+                    viewFriendsProfiles()
 
 
 # function to add a job to profile
@@ -699,7 +700,7 @@ def profileJobMenu():
 
     if userChoice == '1':
         # checks if max number of jobs has been reached, then asks for input to appends to each job attribute
-        if len(ALL_PROFILES[globalUsername]['job_title']) < 3
+        if len(ALL_PROFILES[globalUsername]['job_title']) < 3:
             job_title = input("Enter the title of your job: ")
             ALL_PROFILES[globalUsername]['job_title'].append(job_title)
             job_employer = input("Enter the name of your employer: ")
@@ -715,31 +716,45 @@ def profileJobMenu():
 
         else:
             print("You have already inserted the max amount of job experiences")
+        profileJobMenu()
 
     elif userChoice == '2':
-        for i in range(len(ALL_PROFILES[globalUsername]['job_title'][i])):
-
+        for i in range(len(ALL_PROFILES[globalUsername]['job_title'])):
             # variable to store job number
-            n = i+1
+            n = i + 1
             # Access and print the job attributes
             print(f"Job number {n} Title: {ALL_PROFILES[globalUsername]['job_title'][i]}")
         jobChoice = input("Enter the number of a job to delete: ")
 
-        if jobChoice == '1' or jobChoice == '2' or jobChoice == '3':
-            ALL_PROFILES[globalUsername]['job_title'].pop(jobChoice-1)
-            ALL_PROFILES[globalUsername]['job_employer'][i].pop(jobChoice-1)
-            ALL_PROFILES[globalUsername]['job_date_start'][i].pop(jobChoice-1)
-            ALL_PROFILES[globalUsername]['job_date_end'][i].pop(jobChoice-1)
-            ALL_PROFILES[globalUsername]['job_location'][i].pop(jobChoice-1)
-            ALL_PROFILES[globalUsername]['job_description'][i].pop(jobChoice-1)
+        if jobChoice == '1':
+            ALL_PROFILES[globalUsername]['job_title'].pop(0)
+            ALL_PROFILES[globalUsername]['job_employer'].pop(0)
+            ALL_PROFILES[globalUsername]['job_date_start'].pop(0)
+            ALL_PROFILES[globalUsername]['job_date_end'].pop(0)
+            ALL_PROFILES[globalUsername]['job_location'].pop(0)
+            ALL_PROFILES[globalUsername]['job_description'].pop(0)
+        elif jobChoice == '2':
+            ALL_PROFILES[globalUsername]['job_title'].pop(1)
+            ALL_PROFILES[globalUsername]['job_employer'].pop(1)
+            ALL_PROFILES[globalUsername]['job_date_start'].pop(1)
+            ALL_PROFILES[globalUsername]['job_date_end'].pop(1)
+            ALL_PROFILES[globalUsername]['job_location'].pop(1)
+            ALL_PROFILES[globalUsername]['job_description'].pop(1)
+        elif jobChoice == '3':
+            ALL_PROFILES[globalUsername]['job_title'].pop(2)
+            ALL_PROFILES[globalUsername]['job_employer'].pop(2)
+            ALL_PROFILES[globalUsername]['job_date_start'].pop(2)
+            ALL_PROFILES[globalUsername]['job_date_end'].pop(2)
+            ALL_PROFILES[globalUsername]['job_location'].pop(2)
+            ALL_PROFILES[globalUsername]['job_description'].pop(2)
         else:
             print("Invalid Input")
             profileJobMenu()
+        profileJobMenu()
 
 
 # function to change profile
 def profileChange():
-
     # checks if profile already started in ALL_PROFILES
     if globalUsername not in ALL_PROFILES:
 
@@ -757,25 +772,24 @@ def profileChange():
         education = input("Enter your Education: ")
         while education is None:
             education = input("Error, education cant be empty, Enter your Education: ")
-            
+
         # add all info to dictionary
         ALL_PROFILES[globalUsername] = {
-        'title': title,
-        'major': major,
-        'university': university,
-        'about': about,
-        'education': education,
-        'job_title': [],
-        'job_employer': [],
-        'job_date_start': [],
-        'job_date_end': [],
-        'job_location': [],
-        'job_description': [],
-
+            'title': title,
+            'major': major,
+            'university': university,
+            'about': about,
+            'education': education,
+            'job_title': [],
+            'job_employer': [],
+            'job_date_start': [],
+            'job_date_end': [],
+            'job_location': [],
+            'job_description': [],
+        }
         # recall function to get sent to menu below
         profileChange()
-    }
-    
+
     # sends to below menu if profile already started
     elif globalUsername in ALL_PROFILES:
         print("1. Title")
@@ -828,25 +842,25 @@ def profileChange():
             # print first and last name as well as rest of profile
             print(f'{first_name} {last_name}\'s Profile:\n')
 
-            print(f'Title: {title}')
-            print(f'Major: {major}')
-            print(f'University: {university}')
-            print(f'About: {about}')
-            print(f'Education: {education}')
+            print(f"Title: {ALL_PROFILES[globalUsername]['title']} ")
+            print(f"Major: {ALL_PROFILES[globalUsername]['major']}")
+            print(f"University: {ALL_PROFILES[globalUsername]['university']}")
+            print(f"About: {ALL_PROFILES[globalUsername]['about']}")
+            print(f"Education: {ALL_PROFILES[globalUsername]['education']}")
 
             # use for loop to print each job
-            for i in range(len(ALL_PROFILES[globalUsername]['job_title'][i])):
+            for i in range(len(ALL_PROFILES[globalUsername]['job_title'])):
 
-            # variable to store job number
-            n = i+1
-            # Access and print the job attributes
-            print(f"Job number {n} Title: {ALL_PROFILES[globalUsername]['job_title'][i]}")
-            print(f"Employer: {ALL_PROFILES[globalUsername]['job_employer'][i]}")
-            print(f"Start Date: {ALL_PROFILES[globalUsername]['job_date_start'][i]}")
-            print(f"End Date: {ALL_PROFILES[globalUsername]['job_date_end'][i]}")
-            print(f"Location: {ALL_PROFILES[globalUsername]['job_location'][i]}")
-            print(f"Description: {ALL_PROFILES[globalUsername]['job_description'][i]}")
-            print("\n")
+                # variable to store job number
+                n = i + 1
+                # Access and print the job attributes
+                print(f"Job number {n} Title: {ALL_PROFILES[globalUsername]['job_title'][i]}")
+                print(f"Employer: {ALL_PROFILES[globalUsername]['job_employer'][i]}")
+                print(f"Start Date: {ALL_PROFILES[globalUsername]['job_date_start'][i]}")
+                print(f"End Date: {ALL_PROFILES[globalUsername]['job_date_end'][i]}")
+                print(f"Location: {ALL_PROFILES[globalUsername]['job_location'][i]}")
+                print(f"Description: {ALL_PROFILES[globalUsername]['job_description'][i]}")
+                print("\n")
 
         elif userChoice == '8':
             return
@@ -913,7 +927,7 @@ def learningNewSkill():
 # function for the marketing before the user login
 def preLoggedInScreen():
     print("Success story: Congratulations!!! A USF student has successfully landed an "
-    "internship for the Summer 2024 with the help of InCollege!\n")
+          "internship for the Summer 2024 with the help of InCollege!\n")
     print("Select one of the following options:")
     print("1. Find out why you would want to join InCollege")
     print("2. Find out who has joined InCollege")
@@ -990,7 +1004,7 @@ def loggedinScreen(username):
         return
     else:
         print("Invalid. Please choose a valid option of either '1', through '8'.\n")
-        loggedinScreen()
+        loggedinScreen(username)
 
 
 # function for the first screen the user sees
