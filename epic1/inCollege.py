@@ -109,6 +109,7 @@ def postJob():
     employer = input("Employer's name: ")
     location = input("Job's location: ")
     salary = input("Job's salary: ")
+    poster = ALL_STUDENT_ACCOUNTS[globalUsername]['firstName'] + ' ' +ALL_STUDENT_ACCOUNTS[globalUsername]['lastName']
 
     if len(ALL_JOBS) >= 5:
         print("Sorry, all permitted jobs have been created. Please come back later.\n")
@@ -119,6 +120,7 @@ def postJob():
             'employer': employer,
             'location': location,
             'salary': salary,
+            'poster': poster
         }
 
         return
