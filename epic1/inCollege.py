@@ -8,24 +8,25 @@ ALL_STUDENT_ACCOUNTS = {}
 ALL_JOBS = {}
 
 # global variable to track current user
-global globalUsername = None
+
+globalUsername = None
+
 
 # function for creating an account
 def createAccount():
-    
     username = input("Enter a unique username: ")
-    while(checkUniqueUsername(username) == True):
+    while (checkUniqueUsername(username) == True):
         print("Username is already claimed. Please choose another one.\n")
         username = input("Enter a unique username: ")
 
     password = input("Enter a secure password: ")
-    while(checkValidPassword(password) == False):
+    while (checkValidPassword(password) == False):
         print("Invalid password. Password must be 8-12 characters long, contain at least one capital letter, one digit,"
               " and one special character.\n")
         password = input("Enter a secure password: ")
-        
+
     firstName = input("Enter your first name: ")
-    while firstName is None:    
+    while firstName is None:
         firstName = input("Invalid, Enter your first name: ")
 
     lastName = input("Enter your last name: ")
@@ -72,14 +73,14 @@ def login():
     username = input("Enter username: ")
     password = input("Enter password: ")
 
-    while checkUser(username, password) != true:
+    while checkUser(username, password) != True:
         userChoice = input("Incorrect username/password. Press '1' to try again, or press anything else to exit: ")
         if userChoice == '1':
             username = input("Enter username: ")
             password = input("Enter password: ")
         else:
             return
-            
+
     return username
 
 
@@ -169,7 +170,8 @@ def find():
         lastName = input("Last Name: ")
 
         for username in ALL_STUDENT_ACCOUNTS:
-            if firstName == ALL_STUDENT_ACCOUNTS[username]['firstName'] and lastName == ALL_STUDENT_ACCOUNTS[username]['lastName']:
+            if firstName == ALL_STUDENT_ACCOUNTS[username]['firstName'] and lastName == ALL_STUDENT_ACCOUNTS[username][
+                'lastName']:
                 print("They are a part of the InCollege system.\n")
                 return
 
@@ -177,8 +179,8 @@ def find():
         return
     # if user is logged in, allows for sending friend requests
     elif globalUsername is not None:
-        
-        #list to add found users
+
+        # list to add found users
         searchList = []
 
         print("1. Search for a user by Last Name")
@@ -194,7 +196,7 @@ def find():
             for username in ALL_STUDENT_ACCOUNTS:
                 if lName == ALL_STUDENT_ACCOUNTS[username]['lastName']:
                     searchList.append(username)
-            
+
             if not searchList:
                 print("No one was found with that last name")
             else:
@@ -208,9 +210,12 @@ def find():
 
                 print("Enter the number of a person to send a friend request, or enter anything else to exit")
                 friendChoice = input("Enter here: ")
-                if friendChoice.isdigit() and friendchoice in range(0, len(searchList)-1):
-                    receivingUser = searchList[friendChoice][1]
-                    ALL_STUDENT_ACCOUNTS[username]['requests'].append(receivingUser)
+                if friendChoice.isdigit():
+                    index = int(friendChoice)
+                if friendChoice.isdigit() and friendChoice in range(0, len(searchList) - 1):
+                    index = int(friendChoice)
+                    receivingUser = searchList[index][1]
+                    ALL_STUDENT_ACCOUNTS[receivingUser]['requests'].append(receivingUser)
                 else:
                     return
 
@@ -220,7 +225,7 @@ def find():
             for username in ALL_STUDENT_ACCOUNTS:
                 if University == ALL_STUDENT_ACCOUNTS[username]['university']:
                     searchList.append(username)
-            
+
             if not searchList:
                 print("No one was found in that university")
             else:
@@ -234,17 +239,20 @@ def find():
 
                 print("Enter the number of a person to send a friend request, or enter anything else to exit")
                 friendChoice = input("Enter here: ")
-                if friendChoice.isdigit() and friendchoice in range(0, len(searchList)-1):
-                    receivingUser = searchList[friendChoice][1]
-                    ALL_STUDENT_ACCOUNTS[username]['requests'].append(receivingUser)
+                if friendChoice.isdigit():
+                    index = int(friendChoice)
+                if friendChoice.isdigit() and friendChoice in range(0, len(searchList) - 1):
+                    index = int(friendChoice)
+                    receivingUser = searchList[index][1]
+                    ALL_STUDENT_ACCOUNTS[receivingUser]['requests'].append(receivingUser)
                 else:
                     return
         elif userChoice == '3':
             Major = input("Enter the Major of the user you want to search for: ")
             for username in ALL_STUDENT_ACCOUNTS:
-                if University == ALL_STUDENT_ACCOUNTS[username]['major']:
+                if Major == ALL_STUDENT_ACCOUNTS[username]['major']:
                     searchList.append(username)
-            
+
             if not searchList:
                 print("No one was found with that major")
             else:
@@ -258,17 +266,17 @@ def find():
 
                 print("Enter the number of a person to send a friend request, or enter anything else to exit")
                 friendChoice = input("Enter here: ")
-                if friendChoice.isdigit() and friendchoice in range(0, len(searchList)-1):
-                    receivingUser = searchList[friendChoice][1]
-                    ALL_STUDENT_ACCOUNTS[username]['requests'].append(receivingUser)
-        elif userChoice == '4':
-            return
+                if friendChoice.isdigit():
+                    index = int(friendChoice)
+                if friendChoice.isdigit() and friendChoice in range(0, len(searchList) - 1):
+                    index = int(friendChoice)
+                    receivingUser = searchList[index][1]
+                    ALL_STUDENT_ACCOUNTS[receivingUser]['requests'].append(receivingUser)
+                else:
+                    return
         else:
             print("Invalid, please choose an option with '1', through '4'")
             find()
-
-
-
 
 
 # Important links function
@@ -284,14 +292,13 @@ def importantLinks():
     print("9. return to previous menu")
     if globalUsername is not None:
         print("10. Languages")
-    
+
     # user input to choose option
     if globalUsername is None:
         userChoice = input("Select an option with '1' through '9': ")
-    elif globalUsername is not None:
+    else:
         userChoice = input("Select an option with '1' through '10': ")
 
-    
     # menu for important links
     if userChoice == '1':
         print("InCollege © copyright-2023")
@@ -307,8 +314,8 @@ def importantLinks():
         importantLinks()
     elif userChoice == '5':
         print("InCollege ensures that user data will not be disclosed to unauthorized parties")
-        
-        #check if user is logged in using global variable
+
+        # check if user is logged in using global variable
         if globalUsername is not None:
             privacyChange()
         importantLinks()
@@ -323,17 +330,17 @@ def importantLinks():
         importantLinks()
     elif userChoice == '9':
         return
-    
+
     # change language if user is logged in
     elif globalUsername is not None and userChoice == '10':
         languageChange()
         importantLinks()
     else:
         if globalUsername is None:
-            Print("Invalid. Please choose an option with '1' through '9'")
+            print("Invalid. Please choose an option with '1' through '9'")
 
         elif globalUsername is not None:
-            Print("Invalid. Please choose an option with '1' through '10'")
+            print("Invalid. Please choose an option with '1' through '10'")
     importantLinks()
 
 
@@ -352,52 +359,52 @@ def languageChange():
         ALL_STUDENT_ACCOUNTS[globalUsername]['Language'] = 'Spanish'
         print("Language set to Spanish")
         languageChange()
-    else
+    else:
         return
 
 
 # function for changing privacy options
 def privacyChange():
-            print("1. Turn on InCollege Email")
-            print("2. Turn off InCollege Email")
-            print("3. Turn on SMS")
-            print("4. Turn off SMS")
-            print("5. Turn on Targeted Advertising Features")
-            print("6. Turn off Targeted Advertising Features")
-            print("7. return to previous")
+    print("1. Turn on InCollege Email")
+    print("2. Turn off InCollege Email")
+    print("3. Turn on SMS")
+    print("4. Turn off SMS")
+    print("5. Turn on Targeted Advertising Features")
+    print("6. Turn off Targeted Advertising Features")
+    print("7. return to previous")
 
-            # user input for privacy options
-            privacyChoice = input("Select an option with '1' through '7': ")
-            if privacyChoice == '1':
-                ALL_STUDENT_ACCOUNTS[globalUsername]['Email'] = True
-                print("Email turned on")
-                privacyChange()
-            elif privacyChoice == '2':
-                ALL_STUDENT_ACCOUNTS[globalUsername]['Email'] = False
-                print("Email turned off")
-                privacyChange()
-            elif privacyChoice == '3':
-                ALL_STUDENT_ACCOUNTS[globalUsername]['SMS'] = True
-                print("SMS turned on")
-                privacyChange()
-            elif privacyChoice == '4':
-                ALL_STUDENT_ACCOUNTS[globalUsername]['SMS'] = False
-                print("SMS turned off")
-                privacyChange()
-            elif privacyChoice == '5':
-                ALL_STUDENT_ACCOUNTS[globalUsername]['Advertising'] = True
-                print("Targeted Advertising turned on")
-                privacyChange()
-            elif privacyChoice == '6':
-                ALL_STUDENT_ACCOUNTS[globalUsername]['Advertising'] = False
-                print("Targeted Advertising turned off")
-                privacyChange()
-            elif privacyChoice == '7':
-                return
-            else:
-                print("Invalid, please choose an option with '1' through '7'")
-                privacyChange()
-            
+    # user input for privacy options
+    privacyChoice = input("Select an option with '1' through '7': ")
+    if privacyChoice == '1':
+        ALL_STUDENT_ACCOUNTS[globalUsername]['Email'] = True
+        print("Email turned on")
+        privacyChange()
+    elif privacyChoice == '2':
+        ALL_STUDENT_ACCOUNTS[globalUsername]['Email'] = False
+        print("Email turned off")
+        privacyChange()
+    elif privacyChoice == '3':
+        ALL_STUDENT_ACCOUNTS[globalUsername]['SMS'] = True
+        print("SMS turned on")
+        privacyChange()
+    elif privacyChoice == '4':
+        ALL_STUDENT_ACCOUNTS[globalUsername]['SMS'] = False
+        print("SMS turned off")
+        privacyChange()
+    elif privacyChoice == '5':
+        ALL_STUDENT_ACCOUNTS[globalUsername]['Advertising'] = True
+        print("Targeted Advertising turned on")
+        privacyChange()
+    elif privacyChoice == '6':
+        ALL_STUDENT_ACCOUNTS[globalUsername]['Advertising'] = False
+        print("Targeted Advertising turned off")
+        privacyChange()
+    elif privacyChoice == '7':
+        return
+    else:
+        print("Invalid, please choose an option with '1' through '7'")
+        privacyChange()
+
 
 # useful links function
 def usefulLinks():
@@ -426,7 +433,7 @@ def usefulLinks():
     elif userChoice == '5':
         return
     else:
-        Print("Invalid. Please choose an option with '1' through '5'")
+        print("Invalid. Please choose an option with '1' through '5'")
         usefulLinks()
 
 
@@ -439,14 +446,14 @@ def generalMenu():
     print("5. Careers")
     print("6. Developers")
     print("7. Return to previous menu")
-    if IsLoggedIn == False:
+    if globalUsername is None:
         print("8. Sign up")
 
     # user input to choose option
-    if IsLoggedIn == False:
+    if globalUsername is None:
         userChoice = input("Select an option with '1' through '8': ")
 
-    elif IsLoggedIn == True:
+    else:
         userChoice = input("Select an option with '1' through '7': ")
 
     # menu for general options
@@ -454,7 +461,7 @@ def generalMenu():
         print("We're here to help")
         generalMenu()
     elif userChoice == '2':
-        print("In College: Welcome to In College, the world's largest college student" 
+        print("In College: Welcome to In College, the world's largest college student"
               "network with many users in many countries and territories worldwide")
         generalMenu()
     elif userChoice == '3':
@@ -482,7 +489,7 @@ def generalMenu():
             initialScreen()
         # create account
         elif loginChoice == '2':
-        # check if account limit reached
+            # check if account limit reached
             if len(ALL_STUDENT_ACCOUNTS) > 10:
                 print("Sorry, all permitted accounts have been created. Please come back later.\n")
                 initialScreen()
@@ -492,9 +499,9 @@ def generalMenu():
                 initialScreen()
     else:
         if globalUsername is not None:
-            Print("Invalid. Please choose an option with '1' through '7'")
+            print("Invalid. Please choose an option with '1' through '7'")
         if globalUsername is None:
-            Print("Invalid. Please choose an option with '1' through '8'")
+            print("Invalid. Please choose an option with '1' through '8'")
         generalMenu()
 
 
@@ -533,9 +540,10 @@ def learningNewSkill():
         learningNewSkill()
 
 
-#function for the marketing before the user login
+# function for the marketing before the user login
 def preLoggedInScreen():
-    print("Success story: Congratulations!!! A USF student has successfully landed an internship for the Summer 2024 with the help of InCollege!\n")
+    print(
+        "Success story: Congratulations!!! A USF student has successfully landed an internship for the Summer 2024 with the help of InCollege!\n")
     print("Select one of the following options:")
     print("1. Find out why you would want to join InCollege")
     print("2. Find out who has joined InCollege")
@@ -565,7 +573,7 @@ def preLoggedInScreen():
 def loggedinScreen(username):
     # set isLoggedIn Boolean to true
     globalUsername = username
-    
+
     # other submenu would go here
     print(" ")
     print("1. Search for a job")
@@ -634,6 +642,7 @@ def initialScreen():
     else:
         print("Invalid. Please choose a valid option with '1' through '4'.\n")
         initialScreen()
+
 
 # call main
 if __name__ == '__main__':
