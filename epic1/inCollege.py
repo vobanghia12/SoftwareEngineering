@@ -730,6 +730,7 @@ def loggedinScreen(username):
         importantLinks()
         loggedinScreen(username)
     elif userChoice == '6':
+        showMyNetwork()
         loggedinScreen(username)
     elif userChoice == '7':
         print("\nYou have successfully logged out\n")
