@@ -6,6 +6,7 @@ Fall '23
 # dictionary with key as username password as the value
 ALL_STUDENT_ACCOUNTS = {}
 ALL_JOBS = {}
+ALL_PROFILES = {}
 
 # global variable to track current user (also used to check if user is logged in or not)
 globalUsername = None
@@ -623,8 +624,255 @@ def showMyNetwork():
         showMyNetwork()
 
 
+#function to view friend's profiles
+def viewFriendsProfiles():
+    # create list to add friends into
+        friendList = []
+
+        for friend in ALL_STUDENT_ACCOUNTS[globalUsername]['friends']:
+                friendList.append(friend)
+        # true if friendList is empty
+        if not friendList:
+            print("You have not added any friends yet")
+            return
+
+        # if user has friends
+        elif friendList:
+            # variable to keep track of number of friends
+            num = 1
+            for friend in friendList:
+                # add friends first and last name to variable
+                friend_name = ALL_STUDENT_ACCOUNTS[friend]['firstName'] + ' ' + ALL_STUDENT_ACCOUNTS[friend]['lastName']
+                print(f'{num}. {friend_name}')
+                num += 1
+
+            # user input to choose a friend
+            print("Enter the friends number to see their profile or press anything else to exit")
+            viewChoice = input("Enter Here: ")
+
+            if viewChoice >= 1 and viewChoice <= len(friendList)+1:
+                # variable to store friends name
+                friend_username = friendList[viewChoice-1]
+                if friend_username in ALL_PROFILES:
+                    friend_name = ALL_STUDENT_ACCOUNTS[friend_username]['firstName'] + ' ' + ALL_STUDENT_ACCOUNTS[friend_username]['lastName']
+
+                    print(f'{first_name} {last_name}\'s Profile:\n')
+
+                    print(f'Title: {ALL_PROFILES[friend_username]['title']}')
+                    print(f'Major: {ALL_PROFILES[friend_username]['major']}')
+                    print(f'University: {ALL_PROFILES[friend_username]['university']}')
+                    print(f'About: {ALL_PROFILES[friend_username]['about']}')
+                    print(f'Education: {ALL_PROFILES[friend_username]['education']}')
+
+                    # use for loop to print each job
+                    for i in range(len(ALL_PROFILES[globalUsername]['job_title'][i])):
+
+                        # variable to store job number
+                        n = i+1
+                        # Access and print the job attributes
+                        print(f"Job number {n} Title: {ALL_PROFILES[friend_username]['job_title'][i]}")
+                        print(f"Employer: {ALL_PROFILES[friend_username]['job_employer'][i]}")
+                        print(f"Start Date: {ALL_PROFILES[friend_username]['job_date_start'][i]}")
+                        print(f"End Date: {ALL_PROFILES[friend_username]['job_date_end'][i]}")
+                        print(f"Location: {ALL_PROFILES[friend_username]['job_location'][i]}")
+                        print(f"Description: {ALL_PROFILES[friend_username]['job_description'][i]}")
+                        print("\n")
+                elif friend_username not in ALL_PROFILES
+                    print("That friend has not made a profile yet")
+            viewFriendsProfiles()
+            
+            else:
+                print("Invalid Input")
+                viewFriendsProfiles()
 
 
+
+
+
+# function to add a job to profile
+def profileJobMenu():
+    print("1. Add a job")
+    print("2. Delete a job")
+    print("3. Return to previous menu")
+
+    userChoice = input("Choose an option with '1' through '3': ")
+
+    if userChoice == '1':
+        # checks if max number of jobs has been reached, then asks for input to appends to each job attribute
+        if len(ALL_PROFILES[globalUsername]['job_title']) < 3
+            job_title = input("Enter the title of your job: ")
+            ALL_PROFILES[globalUsername]['job_title'].append(job_title)
+            job_employer = input("Enter the name of your employer: ")
+            ALL_PROFILES[globalUsername]['job_employer'].append(job_employer)
+            job_date_start = input("Enter the start date of your job: ")
+            ALL_PROFILES[globalUsername]['job_date_start'].append(job_date_start)
+            job_date_end = input("Enter the end date of your job: ")
+            ALL_PROFILES[globalUsername]['job_date_end'].append(job_date_end)
+            job_location = input("Enter the location of your job: ")
+            ALL_PROFILES[globalUsername]['job_location'].append(job_location)
+            job_description = input("Enter a description of your job: ")
+            ALL_PROFILES[globalUsername]['job_description'].append(job_description)
+
+        else:
+            print("You have already inserted the max amount of job experiences")
+
+    elif userChoice == '2':
+        for i in range(len(ALL_PROFILES[globalUsername]['job_title'][i])):
+
+            # variable to store job number
+            n = i+1
+            # Access and print the job attributes
+            print(f"Job number {n} Title: {ALL_PROFILES[globalUsername]['job_title'][i]}")
+        jobChoice = input("Enter the number of a job to delete: ")
+
+        if jobChoice == '1' or jobChoice == '2' or jobChoice == '3':
+            ALL_PROFILES[globalUsername]['job_title'].pop(jobChoice-1)
+            ALL_PROFILES[globalUsername]['job_employer'][i].pop(jobChoice-1)
+            ALL_PROFILES[globalUsername]['job_date_start'][i].pop(jobChoice-1)
+            ALL_PROFILES[globalUsername]['job_date_end'][i].pop(jobChoice-1)
+            ALL_PROFILES[globalUsername]['job_location'][i].pop(jobChoice-1)
+            ALL_PROFILES[globalUsername]['job_description'][i].pop(jobChoice-1)
+        else:
+            print("Invalid Input")
+            profileJobMenu()
+
+
+# function to change profile
+def profileChange():
+
+    # checks if profile already started in ALL_PROFILES
+    if globalUsername not in ALL_PROFILES:
+
+        # various statements to input job info
+        title = input("Enter a title: ")
+        major = input("Enter a Major: ")
+        while major is None:
+            major = input("Error, major cant be empty, Enter a Major: ")
+        major = major.title()
+        university = input("Enter a university: ")
+        while university is None:
+            university = input("Error, university cant be empty, Enter a university: ")
+        university = university.title()
+        about = input("Enter data for your about page: ")
+        education = input("Enter your Education: ")
+        while education is None:
+            education = input("Error, education cant be empty, Enter your Education: ")
+            
+        # add all info to dictionary
+        ALL_PROFILES[globalUsername] = {
+        'title': title,
+        'major': major,
+        'university': university,
+        'about': about,
+        'education': education,
+        'job_title': [],
+        'job_employer': [],
+        'job_date_start': [],
+        'job_date_end': [],
+        'job_location': [],
+        'job_description': [],
+
+        # recall function to get sent to menu below
+        profileChange()
+    }
+    
+    # sends to below menu if profile already started
+    elif globalUsername in ALL_PROFILES:
+        print("1. Title")
+        print("2. Major")
+        print("3. University")
+        print("4. About")
+        print("5. Experience")
+        print("6. Education")
+        print("7. View your profile")
+        print("8. Return to previous menu")
+
+        userChoice = input("Select the part of your profile you would like to change with '1' through '7': ")
+
+        if userChoice == '1':
+            title = input("Enter a new title: ")
+            ALL_PROFILES[globalUsername]['title'] = title
+            profileChange()
+        elif userChoice == '2':
+            major = input("Enter a new major: ")
+            while major is None:
+                major = input("Error, major cant be empty, Enter a Major: ")
+                major = major.title()
+            ALL_PROFILES[globalUsername]['major'] = major
+            profileChange()
+        elif userChoice == '3':
+            university = input("Enter a new university: ")
+            while university is None:
+                university = input("Error, university cant be empty, Enter a university: ")
+                university = university.title()
+            ALL_PROFILES[globalUsername]['university'] = university
+            profileChange()
+        elif userChoice == '4':
+            about = input("Enter new data for your About Page: ")
+            ALL_PROFILES[globalUsername]['about'] = about
+            profileChange()
+        elif userChoice == '5':
+            # calls menu to add / delete jobs
+            profileJobMenu()
+        elif userChoice == '6':
+            education = input("Enter new Education details: ")
+            while education is None:
+                education = input("Error, education cant be empty, Enter your Education: ")
+            ALL_PROFILES[globalUsername]['education'] = education
+            profileChange()
+        elif userChoice == '7':
+            # access first and last name to print
+            first_name = ALL_STUDENT_ACCOUNTS[globalUsername]['firstName']
+            last_name = ALL_STUDENT_ACCOUNTS[globalUsername]['lastName']
+
+            # print first and last name as well as rest of profile
+            print(f'{first_name} {last_name}\'s Profile:\n')
+
+            print(f'Title: {title}')
+            print(f'Major: {major}')
+            print(f'University: {university}')
+            print(f'About: {about}')
+            print(f'Education: {education}')
+
+            # use for loop to print each job
+            for i in range(len(ALL_PROFILES[globalUsername]['job_title'][i])):
+
+            # variable to store job number
+            n = i+1
+            # Access and print the job attributes
+            print(f"Job number {n} Title: {ALL_PROFILES[globalUsername]['job_title'][i]}")
+            print(f"Employer: {ALL_PROFILES[globalUsername]['job_employer'][i]}")
+            print(f"Start Date: {ALL_PROFILES[globalUsername]['job_date_start'][i]}")
+            print(f"End Date: {ALL_PROFILES[globalUsername]['job_date_end'][i]}")
+            print(f"Location: {ALL_PROFILES[globalUsername]['job_location'][i]}")
+            print(f"Description: {ALL_PROFILES[globalUsername]['job_description'][i]}")
+            print("\n")
+
+        elif userChoice == '8':
+            return
+        else:
+            print("Invalid, Select an option with '1' through '7'")
+            profileChange()
+
+
+# function to display profile menu
+def profileMenu():
+    print("1. View Friends profiles")
+    print("2. Edit/view your profile")
+    print("3. return to previous menu")
+
+    userChoice = input("Select an option with '1' through '3': ")
+
+    if userChoice == '1':
+        viewFriendsProfiles()
+        profileMenu()
+    elif userChoice == '2':
+        profileChange()
+        profileMenu()
+    elif userChoice == '3':
+        return
+    else:
+        print("Invalid, Select an option with '1' through '3'")
 
 
 # Learn a new skill option
@@ -708,10 +956,11 @@ def loggedinScreen(username):
     print("4. View Useful Links")
     print("5. View InCollege Important Links")
     print("6. Show my network")
-    print("7. log out")
+    print("7. View/Edit profiles")
+    print("8. log out")
 
     # User choose an option
-    userChoice = input("Select an option with '1', through '7': ")
+    userChoice = input("Select an option with '1', through '8': ")
 
     # Option menu:
     if userChoice == '1':
@@ -730,13 +979,17 @@ def loggedinScreen(username):
         importantLinks()
         loggedinScreen(username)
     elif userChoice == '6':
+        showMyNetwork()
         loggedinScreen(username)
     elif userChoice == '7':
+        profileMenu()
+        loggedinScreen(username)
+    elif userChoice == '8':
         print("\nYou have successfully logged out\n")
         globalUsername = None
         return
     else:
-        print("Invalid. Please choose a valid option of either '1', '2', or '3'.\n")
+        print("Invalid. Please choose a valid option of either '1', through '8'.\n")
         loggedinScreen()
 
 
