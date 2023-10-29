@@ -22,14 +22,23 @@ def createAccount():
         createAccount()
         return
 
+    firstName = input("First Name: ")
+    lastName = input("Last Name: ")
+
     # key and value being set in dictionary
-    ALL_STUDENT_ACCOUNTS[username] = password
+    """Change the way system stores account information to a dictionary with the username as the key and information of username (password, firstName, lastName) as value"""
+    ALL_STUDENT_ACCOUNTS[username] = {
+        'password': password,
+        'firstName': firstName,
+        'lastName': lastName,
+    }
+
     print("Account has been created!\n")
 
 
 # function checks if user is in the dictionary and checks corresponding password returns true if found
 def checkUser(username, password):
-    if username in ALL_STUDENT_ACCOUNTS and ALL_STUDENT_ACCOUNTS[username] == password:
+    if username in ALL_STUDENT_ACCOUNTS and ALL_STUDENT_ACCOUNTS[username]['password'] == password:
         return True
     else:
         return False
@@ -139,7 +148,51 @@ def loggedinScreen():
         print("Invalid. Please choose a valid option of either '1', '2', or '3'.\n")
         loggedinScreen()
 
+def findPeople():
+    firstName = input("First Name: ")
+    lastName = input("Last Name: ")
 
+    for i in ALL_STUDENT_ACCOUNTS:
+        if firstName == i.firstName and lastName == i.lastName:
+            print("They are a part of the InCollege system.\n")
+    
+    print("They are not yet a part of the InCollege system yet.\n")
+
+    preLoggedInScreen()
+
+def logIn():
+    username = input("Enter username: ")
+    password = input("Enter password: ")
+    if checkUser(username, password):
+        print("You have successfully logged in.\n")
+        loggedinScreen()
+    else:
+        print("Incorrect username/password. Please try again.\n")
+        initialScreen()
+
+#function for the marketing before the user login
+def preLoggedInScreen():
+    print("Success story: Congratulations!!! A USF student has successfully landed an internship for the Summer 2024 with the help of InCollege!\n")
+    print("Select one of the following options:")
+    print("1. Find out why you would want to join InCollege")
+    print("2. Find out who has joined InCollege")
+    print("3. Login into your account")
+    print("4. Return to the previous screen")
+
+    userChoice = input("Select an option with '1', '2', '3', or '4': ")
+
+    if userChoice == "1":
+        print("Video is now playing")
+    elif userChoice == "2":
+        findPeople()
+    elif userChoice == "3":
+        logIn()
+    elif userChoice == "4":
+        initialScreen()
+    else:
+        print("Invalid. Please select one of the following options: '1', '2', '3', or '4'.\n")
+        preLoggedInScreen()
+    
 # function for the first screen the user sees
 def initialScreen():
     print("\nWelcome to InCollege!\n")
@@ -148,14 +201,7 @@ def initialScreen():
     userChoice = input("Select an option with '1' or '2': ")
     # logging in
     if userChoice == '1':
-        username = input("Enter username: ")
-        password = input("Enter password: ")
-        if checkUser(username, password):
-            print("You have successfully logged in.\n")
-            loggedinScreen()
-        else:
-            print("Incorrect username/password. Please try again.\n")
-            initialScreen()
+        preLoggedInScreen()
     # create account
     elif userChoice == '2':
         # check if account limit reached
