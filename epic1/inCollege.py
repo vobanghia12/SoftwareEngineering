@@ -5,6 +5,7 @@ Fall '23
 
 # dictionary with key as username password as the value
 ALL_STUDENT_ACCOUNTS = {}
+ALL_JOBS = {}
 
 
 # function for creating an account
@@ -75,10 +76,47 @@ def checkValidPassword(password):
         return False
 
 
+def postJob():
+    title = input("Job's title: ")
+    description = input("Job's description: ")
+    employer = input("Employer's name: ")
+    location = input("Job's location: ")
+    salary = input("Job's salary: ")
+
+    if len(ALL_JOBS) >= 5:
+        print("Sorry, all permitted jobs have been created. Please come back later.\n")
+        jobSearch()
+    else:
+        ALL_JOBS[title] = {
+            'description': description,
+            'employer': employer,
+            'location': location,
+            'salary': salary,
+        }
+
+        jobSearch()
+
 # Job search/Internship Option
 def jobSearch():
-    print("\nunder construction\n")
-    loggedinScreen()
+    print("1. Search for a job/internship")
+    print("2. Post a job/internship")
+    print("3. Return to main menu")
+
+    # User choose an option
+    userChoice = input("Select an option with '1', '2', or '3': ")
+
+    # Option menu:
+    if userChoice == '1':
+        print("\nunder construction\n")
+        jobSearch()
+    elif userChoice == '2':
+        postJob()
+        jobSearch()
+    elif userChoice == '3':
+        loggedinScreen()
+    else:
+        print("Invalid. Please choose a valid option of either '1', '2', or '3'.\n")
+        jobSearch()
 
 
 # Find someone you know option
