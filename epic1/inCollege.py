@@ -135,7 +135,7 @@ def postJob():
     # sets 'poster' variable to the first and last name of the person who posted it with a space inbetween
     poster = ALL_STUDENT_ACCOUNTS[globalUsername]['firstName'] + ' ' + ALL_STUDENT_ACCOUNTS[globalUsername]['lastName']
 
-    if len(ALL_JOBS) >= 5:
+    if len(ALL_JOBS) >= 10: #Increase the number of jobs listing supported
         print("Sorry, all permitted jobs have been created. Please come back later.\n")
         return
     else:
