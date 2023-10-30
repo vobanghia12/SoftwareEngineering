@@ -145,10 +145,38 @@ def postJob():
             'employer': employer,
             'location': location,
             'salary': salary,
-            'poster': poster
+            'poster': poster,
+            'applicants': set(), # add applicants attributes to track job's applicants
+            'saved': False # add saved attribute to track if job is saved
         }
 
         return
+
+#Func to handle job titles listing
+def listingSearcḥ():
+    print("1. List all posted jobs")
+    print("2. List of all jobs applied to")
+    print("3. List of all jobs not applied to")
+    print("4. List of saved jobs")
+    print("5. Return to previous menu")
+
+    # user input to choose option
+    userChoice = input("Select an option with '1', '2', '3', '4', or '5': ")
+
+    # menu for listing search options
+    if userChoice == '1':
+        #
+    elif userChoice == '2':
+        #
+    elif userChoice == '3':
+        #
+    elif userChoice == '4':
+        #
+    elif userChoice == '5':
+        #
+    else:
+        print("Invalid. Please choose an option with '1', '2', '3', '4', or '5'.\n")
+        listingSearcḥ()
 
 
 # Job search/Internship Option
@@ -162,7 +190,7 @@ def jobSearch():
 
     # Option menu:
     if userChoice == '1':
-        print("\nunder construction\n")
+        listingSearcḥ()
         jobSearch()
     elif userChoice == '2':
         postJob()
