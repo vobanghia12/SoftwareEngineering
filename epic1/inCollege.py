@@ -165,7 +165,27 @@ def listingSearcḥ():
 
     # menu for listing search options
     if userChoice == '1':
-        #
+        # check if there are any jobs posted
+        if len(ALL_JOBS) == 0:
+            print("No jobs have been posted yet")
+            listingSearcḥ()
+        else:
+            # print each job (title, description, employer, location, salary) and indicate if applicant has applied or not
+            for title in ALL_JOBS:
+                description = ALL_JOBS[title]['description']
+                employer = ALL_JOBS[title]['employer']
+                location = ALL_JOBS[title]['location']
+                salary = ALL_JOBS[title]['salary']
+                poster = ALL_JOBS[title]['poster']
+                applicants = ALL_JOBS[title]['applicants']
+                if globalUsername in applicants:
+                    print(f'{title}, {description}, {employer}, {location}, {salary}, {poster}, Applied')
+                else:
+                    print(f'{title}, {description}, {employer}, {location}, {salary}, {poster}, Not Applied')
+            
+            listingSearcḥ()            
+
+
     elif userChoice == '2':
         #
     elif userChoice == '3':
