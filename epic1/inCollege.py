@@ -31,22 +31,22 @@ def createAccount():
 
     # input first name and force re-input while empty
     firstName = input("Enter your first name: ")
-    while firstName is None:
+    while not firstName:
         firstName = input("Invalid, Enter your first name: ")
 
     # input last name and force re-input while empty
     lastName = input("Enter your last name: ")
-    while lastName is None:
+    while not lastName:
         lastName = input("Invalid, Enter your last name: ")
 
     # input university and force re-input while empty
     university = input("Enter your university: ")
-    while university is None:
+    while not university:
         university = input("Invalid, Enter your university: ")
 
     # input major and force re-input while empty
     major = input("Enter your major: ")
-    while major is None:
+    while not major:
         major = input("Invalid, Enter your major: ")
 
     # Key is the username, values are password, firstName, lastName, university, major, Language
@@ -761,16 +761,16 @@ def profileChange():
         # various statements to input job info
         title = input("Enter a title: ")
         major = input("Enter a Major: ")
-        while major is None:
+        while not major:
             major = input("Error, major cant be empty, Enter a Major: ")
         major = major.title()
         university = input("Enter a university: ")
-        while university is None:
+        while not university:
             university = input("Error, university cant be empty, Enter a university: ")
         university = university.title()
         about = input("Enter data for your about page: ")
         education = input("Enter your Education: ")
-        while education is None:
+        while not education:
             education = input("Error, education cant be empty, Enter your Education: ")
 
         # add all info to dictionary
@@ -809,14 +809,14 @@ def profileChange():
             profileChange()
         elif userChoice == '2':
             major = input("Enter a new major: ")
-            while major is None:
+            while not major:
                 major = input("Error, major cant be empty, Enter a Major: ")
                 major = major.title()
             ALL_PROFILES[globalUsername]['major'] = major
             profileChange()
         elif userChoice == '3':
             university = input("Enter a new university: ")
-            while university is None:
+            while not university:
                 university = input("Error, university cant be empty, Enter a university: ")
                 university = university.title()
             ALL_PROFILES[globalUsername]['university'] = university
@@ -830,7 +830,7 @@ def profileChange():
             profileJobMenu()
         elif userChoice == '6':
             education = input("Enter new Education details: ")
-            while education is None:
+            while not education:
                 education = input("Error, education cant be empty, Enter your Education: ")
             ALL_PROFILES[globalUsername]['education'] = education
             profileChange()
