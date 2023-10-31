@@ -216,7 +216,26 @@ def listingSearcḥ():
             listingSearcḥ()
 
     elif userChoice == '3':
-        #
+        #list all the jobs this applicant have not applied
+        for title in ALL_JOBS:
+            applicants = ALL_JOBS[title]['applicants']
+            if globalUsername not in applicants:
+                # print each job (title, description, employer, location, salary)
+                description = ALL_JOBS[title]['description']
+                employer = ALL_JOBS[title]['employer']
+                location = ALL_JOBS[title]['location']
+                salary = ALL_JOBS[title]['salary']
+
+                print(f'{title}, {description}, {employer}, {location}, {salary}')
+
+        #prompt the user for applying for job
+        apply = input("Select '1' if you want to apply for a job or anything else to exit")
+        if apply == "1":
+            applyJob()
+            listingSearcḥ()
+        else:
+            listingSearcḥ()
+
     elif userChoice == '4':
         #
     elif userChoice == '5':
