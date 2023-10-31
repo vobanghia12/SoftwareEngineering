@@ -1,238 +1,102 @@
 import unittest
-import io
-from inCollege import *
-from contextlib import redirect_stdout
-from io import StringIO
-import mock
 from unittest.mock import patch
+import inCollege
 
-#test showmynetwork() and find() function
-
-class TestInCollege(unittest.TestCase):
-    #test user in the system when not logged in
-    @patch('inCollege.globalUsername', None)
-    @patch('builtins.input', side_effect=['Nghia', 'Vo'])
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS', {"wyoming44":{"lastName":"Vo", "firstName":"Nghia"}})
-    def testUserInTheSystemWhenNotLoggedIn(self, mock_input):
-        expected_output = "They are a part of the InCollege system."
-        out = io.StringIO()
-        with redirect_stdout(out):
-            find()
-        self.assertEqual(out.getvalue().strip(), expected_output)
-
-    #test user not in the system when not logged in
-    @patch('inCollege.globalUsername', None)
-    @patch('builtins.input', side_effect=['Nghia', 'Vo'])
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS', {"wyoming44":{"lastName":"Vo", "firstName":"Jason"}})
-    def testUserNotInTheSystemWhenNotLoggedIn(self, mock_input):
-        expected_output = "They are not a part of the InCollege system yet."
-        out = io.StringIO()
-        with redirect_stdout(out):
-            find()
-        self.assertEqual(out.getvalue().strip(), expected_output)
-
-    #test user logged in and search by last name but not found
-    @patch('inCollege.globalUsername', 'epic4coming')
-    @patch('builtins.input', side_effect=['1', 'Wong'])
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS', {"wyoming44":{"lastName":"Vo", "firstName":"Jason"}})
-    def testUserLoggedInAndSearchByLastName_notFound(self, mock_input):
-        expected_output = "No one was found with that last name"
-        out = io.StringIO()
-        with redirect_stdout(out):
-            find()
-        value = expected_output in out.getvalue().strip()
-        assert value == True
-
-    #test user logged in and search by last name and found, but wrong digit number when look up
-    @patch('inCollege.globalUsername', 'epic4coming')
-    @patch('builtins.input', side_effect=['1', 'Vo', '-1'])
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS', {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS"}})
-    def testUserLoggedInAndSearchByLastName_found_wrongDigitNumber(self, mock_input):
-        expected_output = "0. Jason Vo, SJSU, CS"
-        out = io.StringIO()
-        with redirect_stdout(out):
-            find()
-        value = expected_output in out.getvalue().strip()
-        assert value == True
-
-    #test user logged in and search by last name and found, but accurate digit number when look up
-    @patch('inCollege.globalUsername', 'wyoming55')
-    @patch('builtins.input', side_effect=['1', 'Vo','0'])
-    def testUserLoggedInAndSearchByLastName_found_rightDigitNumber(self, mock_input):
-        out = io.StringIO()
-        with mock.patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}}) as mocked_find:
-            find()
-            assert mocked_find['wyoming44']['requests'] == ['wyoming55']
+class TestInCollegeFeatures(unittest.TestCase):
 
 
-    #test user logged in and search by university and not found
-    @patch('inCollege.globalUsername', 'wyoming55')
-    @patch('builtins.input', side_effect=['2', 'USF'])
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}})
-    def testUserLoggedInAndSearchByUniversity_notFound(self, mock_input):
-        expected_output = "No one was found in that university"
-        out = io.StringIO()
-        with redirect_stdout(out):
-            find()
-        self.assertTrue(expected_output in out.getvalue().strip())
+    @patch('builtins.input')
+    def test_post_jobs(self, mock_input):
+        prompts = ["Title {}".format(i) for i in range(1, 12)]
+        prompts.extend(["Description", "Employer", "Location", "Salary"] * 11)
+        mock_input.side_effect = prompts
 
-    #test user logged in and search by university and found and enter wrong digit number
-    @patch('inCollege.globalUsername', 'wyoming55')
-    @patch('builtins.input', side_effect=['2', 'SJSU', "-1"])
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"USF","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}})
-    def testUserLoggedInAndSearchByUniversity_Found_butWrongDigitNumber(self, mock_input):
-        expected_output = "0. Jason Vo, SJSU, CS"
-        out = io.StringIO()
-        with redirect_stdout(out):
-            find()
-        self.assertTrue(expected_output in out.getvalue().strip())
+        # Test posting up to ten jobs
+        for i in range(10):
+            inCollege.postJob()
+            self.assertEqual(len(inCollege.ALL_JOBS), i + 1)
 
-    #test user logged in and search by university and found and enter right digit number
-    @patch('inCollege.globalUsername', 'wyoming55')
-    @patch('builtins.input', side_effect=['2', 'SJSU', "0"])
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"USF","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}})
-    def testUserLoggedInAndSearchByUniversity_Found_butRightDigitNumber(self, mock_input):
-        out = io.StringIO()
-        with mock.patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"USF","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}}) as mocked_find:
-            find()
-            assert mocked_find['wyoming44']['requests'] == ['wyoming55']
+        # Test trying to post an 11th job
+        inCollege.postJob()
+        self.assertEqual(len(inCollege.ALL_JOBS), 10)  # Length should still be 10
 
-    #test user logged in and search by major and not found
-    @patch('inCollege.globalUsername', 'wyoming55')
-    @patch('builtins.input', side_effect=['3', 'Business Analytics'])
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CSE", 'requests': []}})
-    def testUserLoggedInAndSearchByMajor_notFound(self, mock_input):
-        expected_output = "No one was found with that major"
-        out = io.StringIO()
-        with redirect_stdout(out):
-            find()
-        self.assertTrue(expected_output in out.getvalue().strip())
+    @patch('builtins.input')
+    def test_delete_job_and_applications(self, mock_input):
+        inCollege.globalUsername = 'job_poster'
+        inCollege.ALL_JOBS['Job To Delete'] = {'applicants': {'test_user', 'another_user'}, 'saved': False, 'poster': 'job_poster'}
 
-    #test user logged in and search by major and found with wrong digit number
-    @patch('inCollege.globalUsername', 'wyoming55')
-    @patch('builtins.input', side_effect=['3', 'CS', '-1'])
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}})
-    def testUserLoggedInAndSearchByMajor_notFound_wrongDigit(self, mock_input):
-        expected_output = "0. Jason Vo, SJSU, CS"
-        out = io.StringIO()
-        with redirect_stdout(out):
-            find()
-        self.assertTrue(expected_output in out.getvalue().strip())
+        mock_input.side_effect = ["Job To Delete"]
+        inCollege.deleteJob()
 
+        # Ensure the job is deleted
+        self.assertNotIn('Job To Delete', inCollege.ALL_JOBS)
 
-    #test user logged in and search by major and found with right digit number
-    @patch('inCollege.globalUsername', 'wyoming55')
-    @patch('builtins.input', side_effect=['3', 'CS', '0'])
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}})
-    def testUserLoggedInAndSearchByMajor_Found_RightDigit(self, mock_input):
-        out = io.StringIO()
-        with mock.patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}}) as mocked_find:
-            find()
-            assert mocked_find['wyoming44']['requests'] == ['wyoming55']
+        # Ensure the applications are removed
+        for user in inCollege.ALL_STUDENT_ACCOUNTS:
+            self.assertNotIn('Job To Delete', inCollege.ALL_STUDENT_ACCOUNTS[user].get('applied_jobs', set()))
 
+    @patch('builtins.input')
+    def test_apply_and_save_jobs(self, mock_input):
+        inCollege.globalUsername = 'test_user'
+        inCollege.ALL_STUDENT_ACCOUNTS['test_user'] = {}
 
-    #test if the profile major can be changed
-    @patch('inCollege.globalUsername', 'wyoming55')
-    @patch('builtins.input', side_effect=['2', 'CS', '8'])
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}})
-    def test_change_major(self, mock_input):
-        out = StringIO()
-        with patch('sys.stdout', out):
-            profileChange()
+        # Mock job to apply to and save
+        inCollege.ALL_JOBS['Test Job'] = {'applicants': set(), 'saved': False, 'poster': 'other_user'}
 
-        expected_output = "New Title"
-        self.assertIn(expected_output, out.getvalue())
+        prompts_apply = ["Test Job", "2024", "Immediately", "I am a good fit"]
+        mock_input.side_effect = prompts_apply
+        inCollege.applyJob()
+        self.assertIn('test_user', inCollege.ALL_JOBS['Test Job']['applicants'])
 
-    #test if the profile university can be changed
-    @patch('inCollege.globalUsername', 'wyoming55')
-    @patch('builtins.input', side_effect=['3', 'New University', '8'])
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}})
-    def test_change_university(self, mock_input):
-        out = StringIO()
-        with patch('sys.stdout', out):
-            profileChange()
+        prompts_save = ["Test Job"]
+        mock_input.side_effect = prompts_save
+        inCollege.saveJob()
+        self.assertIn('test_user', inCollege.ALL_JOBS['Test Job']['saved_by'])
 
-        expected_output = "New University"
-        self.assertIn(expected_output, out.getvalue())
+    @patch('builtins.input')
+    def test_unsave_job(self, mock_input):
+        inCollege.globalUsername = 'test_user'
+        inCollege.ALL_STUDENT_ACCOUNTS['test_user'] = {'saved_jobs': {'Test Job'}}
+        inCollege.ALL_JOBS['Test Job'] = {'applicants': set(), 'saved_by': {'test_user'}, 'poster': 'other_user'}
 
-    #test if the profile "new about section" can be changed
-    @patch('inCollege.globalUsername', 'wyoming55')
-    @patch('builtins.input', side_effect=['4', 'New About Section', '8'])
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': []}})
-    def test_change_about_section(self, mock_input):
-        out = StringIO()
-        with patch('sys.stdout', out):
-            profileChange()
+        prompts_unsave = ["Test Job"]
+        mock_input.side_effect = prompts_unsave
 
-        expected_output = "New About Section"
-        self.assertIn(expected_output, out.getvalue())
+        inCollege.unsaveJob()
+        self.assertNotIn('Test Job', inCollege.ALL_STUDENT_ACCOUNTS['test_user']['saved_jobs'])
 
+    @patch('builtins.input')
+    def test_cannot_apply_for_own_job(self, mock_input):
+        inCollege.globalUsername = 'test_user'
+        inCollege.ALL_JOBS['My Own Job'] = {'applicants': set(), 'saved': False, 'poster': 'test_user'}
 
+        prompts_apply = ["My Own Job", "2024", "Immediately", "I am a good fit"]
+        mock_input.side_effect = prompts_apply
 
-    #Test to view friends profile 
-    @patch('inCollege.globalUsername', 'wyoming55')
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS', {
-        "wyoming44": {'university': "SJSU", 'lastName': "Vo", 'firstName': "Jason", 'major': "CS", 'requests': []},
-        "wyoming56": {'university': "SJSU", 'lastName': "Smith", 'firstName': "Alice", 'major': "Engineering", 'requests': []},
-    })
-    def test_view_friend_profile(self):
-        # Simulate a friend relationship
-        ALL_STUDENT_ACCOUNTS['wyoming55']['friends'] = ['wyoming44', 'wyoming56']
+        inCollege.applyJob()
+        self.assertNotIn('test_user', inCollege.ALL_JOBS['My Own Job']['applicants'])
 
-        # Redirect the function's output to capture it
-        out = StringIO()
-        with patch('sys.stdout', out):
-            viewFriendsProfiles()
+    @patch('builtins.input')
+    def test_cannot_apply_twice(self, mock_input):
+        inCollege.globalUsername = 'test_user'
+        inCollege.ALL_JOBS['Another Job'] = {'applicants': set(), 'saved': False, 'poster': 'other_user'}
 
-        # Verify that the friend's profile is correctly displayed
-        expected_output = "Alice Smith's Profile:\n"
-        self.assertIn(expected_output, out.getvalue())
-        self.assertIn("Title: ", out.getvalue())
-        self.assertIn("Major: Engineering", out.getvalue())
-        self.assertIn("University: SJSU", out.getvalue())
-        self.assertIn("About: ", out.getvalue())
-        self.assertIn("Education: ", out.getvalue())
+        prompts_apply = ["Another Job", "2024", "Immediately", "I am a good fit"]
+        mock_input.side_effect = prompts_apply * 2  # Attempt to apply twice
 
-    #Test to view other non-friends profile
-    @patch('inCollege.globalUsername', 'wyoming55')
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS', {
-        "wyoming44": {'university': "SJSU", 'lastName': "Vo", 'firstName': "Jason", 'major': "CS", 'requests': []},
-    })
-    def test_view_non_friend_profile(self):
-        # Simulate no friend relationship
-        ALL_STUDENT_ACCOUNTS['wyoming55']['friends'] = []
+        inCollege.applyJob()
+        inCollege.applyJob()
+        self.assertEqual(len(inCollege.ALL_JOBS['Another Job']['applicants']), 1)
 
-        # Redirect the function's output to capture it
-        out = StringIO()
-        with patch('sys.stdout', out):
-            viewFriendsProfiles()
+    @patch('builtins.input')
+    def test_student_notified_on_deleted_job(self, mock_input):
+        inCollege.globalUsername = 'job_poster'
+        inCollege.ALL_JOBS['Job To Notify'] = {'applicants': {'test_user'}, 'saved': False, 'poster': 'job_poster'}
+        inCollege.deleteJobNotification = {}  # Reset notifications
 
-        # Verify that the function correctly handles non-friends
-        expected_output = "You have not added any friends yet"
-        self.assertIn(expected_output, out.getvalue())
-
-    #Test Case to display list of friends
-    @patch('inCollege.globalUsername', 'wyoming55')
-    @patch('inCollege.ALL_STUDENT_ACCOUNTS', {
-        "wyoming44": {'university': "SJSU", 'lastName': "Vo", 'firstName': "Jason", 'major': "CS", 'requests': []},
-        "wyoming56": {'university': "SJSU", 'lastName': "Smith", 'firstName': "Alice", 'major': "Engineering", 'requests': []},
-    })
-    def test_display_friends_list(self):
-        # Simulate friend relationships
-        ALL_STUDENT_ACCOUNTS['wyoming55']['friends'] = ['wyoming44', 'wyoming56']
-
-        # Redirect the function's output to capture it
-        out = StringIO()
-        with patch('sys.stdout', out):
-            showMyNetwork()
-
-        # Verify that the list of friends is displayed
-        expected_output = "1. Jason Vo, SJSU, CS"
-        self.assertIn(expected_output, out.getvalue())
-        expected_output = "2. Alice Smith, SJSU, Engineering"
-        self.assertIn(expected_output, out.getvalue())
-
-
+        inCollege.deleteJob('Job To Notify')
+        self.assertIn('test_user', inCollege.deleteJobNotification)
+        self.assertIn('Job To Notify', inCollege.deleteJobNotification['test_user'])
 
 if __name__ == '__main__':
     unittest.main()
