@@ -152,16 +152,19 @@ def postJob():
 
         return
 
+def applyJob():
+
 #Func to handle job titles listing
 def listingSearcḥ():
     print("1. List all posted jobs")
     print("2. List of all jobs applied to")
     print("3. List of all jobs not applied to")
     print("4. List of saved jobs")
-    print("5. Return to previous menu")
+    print("5. Apply for a job")
+    print("6. Return to previous menu")
 
     # user input to choose option
-    userChoice = input("Select an option with '1', '2', '3', '4', or '5': ")
+    userChoice = input("Select an option with '1', '2', '3', '4', '5', or '6': ")
 
     # menu for listing search options
     if userChoice == '1':
@@ -183,19 +186,45 @@ def listingSearcḥ():
                 else:
                     print(f'{title}, {description}, {employer}, {location}, {salary}, {poster}, Not Applied')
             
-            listingSearcḥ()            
-
-
+            #prompt the user for applying for job
+            apply = input("Select '1' if you want to apply for a job or anything else to exit")
+            if apply == "1":
+                applyJob()
+                listingSearcḥ()
+            else:
+                listingSearcḥ()
+        
     elif userChoice == '2':
-        #
+        #List all the job this applicant have applied
+        for title in ALL_JOBS:
+            applicants = ALL_JOBS[title]['applicants']
+            if globalUsername in applicants:
+                # print each job (title, description, employer, location, salary)
+                description = ALL_JOBS[title]['description']
+                employer = ALL_JOBS[title]['employer']
+                location = ALL_JOBS[title]['location']
+                salary = ALL_JOBS[title]['salary']
+
+                print(f'{title}, {description}, {employer}, {location}, {salary}')
+
+        #prompt the user for applying for job
+        apply = input("Select '1' if you want to apply for a job or anything else to exit")
+        if apply == "1":
+            applyJob()
+            listingSearcḥ()
+        else:
+            listingSearcḥ()
+
     elif userChoice == '3':
         #
     elif userChoice == '4':
         #
     elif userChoice == '5':
         #
+    elif userChoice == '6':
+        #
     else:
-        print("Invalid. Please choose an option with '1', '2', '3', '4', or '5'.\n")
+        print("Invalid. Please choose an option with '1', '2', '3', '4', '5', or '6'.\n")
         listingSearcḥ()
 
 
