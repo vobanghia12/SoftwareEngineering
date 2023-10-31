@@ -8,6 +8,9 @@ ALL_STUDENT_ACCOUNTS = {}
 ALL_JOBS = {}
 ALL_PROFILES = {}
 
+#dictionary to store applicants and the applied job which has been deleted
+ALL_APPLICANT_DELETED_JOBS = set()
+
 # global variable to track current user (also used to check if user is logged in or not)
 globalUsername = None
 
@@ -345,6 +348,10 @@ def listingSearcḥ():
 
 # Job search/Internship Option
 def jobSearch():
+    #notify the user if a job they have applied has been deleted
+    if globalUsername in ALL_APPLICANT_DELETED_JOBS:
+        print("A job you have applied to has been deleted")
+
     print("1. Search for a job/internship")
     print("2. Post a job/internship")
     print("3. Return to main menu")
@@ -1147,6 +1154,38 @@ def preLoggedInScreen():
         preLoggedInScreen()
 
 
+def deleteJob(username):
+    #check if this username is the poster of any jobs
+    if len([job for job in ALL_JOBS if job['poster'] == username]) == 0:
+        print("You have not posted any jobs")
+        return
+    
+    #print all the jobs that the user is the poster
+    for i in range(len(ALL_JOBS)):
+        if ALL_JOBS[i]['poster'] == username:
+            print(f"{i+1}. {ALL_JOBS[i]['title']}")
+    #ask the user which job they want to delete
+    jobChoice = input("Enter the number of the job you want to delete: ")
+    #check if the input is a number
+    if jobChoice.isdigit():
+        #check if the input is in the range of the list
+        if int(jobChoice) in range(1, len(ALL_JOBS)+1):
+            #store applicants of this job so that they can be notified later when they are in the job section
+            ALL_APPLICANT_DELETED_JOBS.update(ALL_JOBS[int(jobChoice)-1]['applicants'])
+            
+            #delete the job
+            ALL_JOBS.pop(int(jobChoice)-1)
+            print("Job deleted")
+        else:
+            print("Invalid input")
+            deleteJob(username) #delete the job
+
+    else:
+        print("Invalid input")
+        deleteJob(username)
+    
+    return
+
 # function for when the user is logged in
 def loggedinScreen(username):
     # set isLoggedIn Boolean to true
@@ -1163,10 +1202,11 @@ def loggedinScreen(username):
     print("5. View InCollege Important Links")
     print("6. Show my network")
     print("7. View/Edit profiles")
-    print("8. log out")
+    print("8. Delete a job")
+    print("9. log out")
 
     # User choose an option
-    userChoice = input("Select an option with '1', through '8': ")
+    userChoice = input("Select an option with '1', through '9': ")
 
     # Option menu:
     if userChoice == '1':
@@ -1191,6 +1231,9 @@ def loggedinScreen(username):
         profileMenu()
         loggedinScreen(username)
     elif userChoice == '8':
+        deleteJob(username)
+        loggedinScreen(username)
+    elif userChoice == '9':
         print("\nYou have successfully logged out\n")
         globalUsername = None
         return
