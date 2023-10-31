@@ -154,6 +154,10 @@ def postJob():
 
 def applyJob():
 
+
+def saveJob():
+
+
 #Func to handle job titles listing
 def listingSearcḥ():
     print("1. List all posted jobs")
@@ -186,10 +190,13 @@ def listingSearcḥ():
                 else:
                     print(f'{title}, {description}, {employer}, {location}, {salary}, {poster}, Not Applied')
             
-            #prompt the user for applying for job
-            apply = input("Select '1' if you want to apply for a job or anything else to exit")
+            #prompt the user for applying for job or saving job
+            apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
             if apply == "1":
                 applyJob()
+                listingSearcḥ()
+            elif apply == "2":
+                saveJob()
                 listingSearcḥ()
             else:
                 listingSearcḥ()
@@ -207,10 +214,13 @@ def listingSearcḥ():
 
                 print(f'{title}, {description}, {employer}, {location}, {salary}')
 
-        #prompt the user for applying for job
-        apply = input("Select '1' if you want to apply for a job or anything else to exit")
+        #prompt the user for applying for job or saving job
+        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
         if apply == "1":
             applyJob()
+            listingSearcḥ()
+        elif apply == "2":
+            saveJob()
             listingSearcḥ()
         else:
             listingSearcḥ()
@@ -228,10 +238,13 @@ def listingSearcḥ():
 
                 print(f'{title}, {description}, {employer}, {location}, {salary}')
 
-        #prompt the user for applying for job
-        apply = input("Select '1' if you want to apply for a job or anything else to exit")
+        #prompt the user for applying for job or saving job
+        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
         if apply == "1":
             applyJob()
+            listingSearcḥ()
+        if apply == "2":
+            saveJob()
             listingSearcḥ()
         else:
             listingSearcḥ()
