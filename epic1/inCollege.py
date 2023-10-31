@@ -628,15 +628,17 @@ def viewFriendsProfiles():
     # create list to add friends into
     friendList = []
 
-    for friend in ALL_STUDENT_ACCOUNTS[globalUsername]['friends']:
-        friendList.append(friend)
-    # true if friendList is empty
     if not friendList:
         print("You have not added any friends yet")
         return
+    
+    for friend in ALL_STUDENT_ACCOUNTS[globalUsername]['friends']:
+        friendList.append(friend)
+    # true if friendList is empty
+    
 
     # if user has friends
-    elif friendList:
+    if friendList:
         # variable to keep track of number of friends
         num = 1
         for friend in friendList:
