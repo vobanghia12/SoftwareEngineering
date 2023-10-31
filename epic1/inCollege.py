@@ -250,11 +250,38 @@ def listingSearcḥ():
             listingSearcḥ()
 
     elif userChoice == '4':
-        #
+        #List of saved jobs
+        for title in ALL_JOBS:
+            saved = ALL_JOBS[title]['saved']
+            if saved == True:
+                # print each job (title, description, employer, location, salary)
+                description = ALL_JOBS[title]['description']
+                employer = ALL_JOBS[title]['employer']
+                location = ALL_JOBS[title]['location']
+                salary = ALL_JOBS[title]['salary']
+
+                print(f'{title}, {description}, {employer}, {location}, {salary}')
+
+        #prompt the user for applying for job or saving job
+        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
+        if apply == "1":
+            applyJob()
+            listingSearcḥ()
+        if apply == "2":
+            saveJob()
+            listingSearcḥ()
+        else:
+            listingSearcḥ()
+
     elif userChoice == '5':
-        #
+        #Apply for a job
+        applyJob()
+        listingSearcḥ()
+    
     elif userChoice == '6':
-        #
+        #Return to previous menu
+        return
+    
     else:
         print("Invalid. Please choose an option with '1', '2', '3', '4', '5', or '6'.\n")
         listingSearcḥ()
