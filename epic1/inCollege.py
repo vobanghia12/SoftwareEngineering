@@ -147,16 +147,66 @@ def postJob():
             'salary': salary,
             'poster': poster,
             'applicants': set(), # add applicants attributes to track job's applicants
+            'applications': set(), # add applications
             'saved': False # add saved attribute to track if job is saved
         }
 
         return
 
 def applyJob():
-
+    #print the titles of all jobs
+    for title in ALL_JOBS:
+        print(title)
+    #prompt the user to choose a job
+    jobTitle = input("Enter the title of the job you want to apply to: ")
+    #check if the job title is valid, or if the job is already applied to, or if the user is the poster
+    if jobTitle not in ALL_JOBS:
+        print("Invalid job title")
+        return
+    elif globalUsername in ALL_JOBS[jobTitle]['applicants']:
+        print("You have already applied to this job")
+        return
+    elif globalUsername == ALL_JOBS[jobTitle]['poster']:
+        print("You cannot apply to a job you posted")
+        return
+    else:
+        #add the user to the job's applicants
+        ALL_JOBS[jobTitle]['applicants'].add(globalUsername)
+        
+        #Ask the user to enter a graduation date, a date they can start working, and a paragraph explaining why they are a good fit for the job, and store this application to the job
+        graduationDate = input("Enter your graduation date: ")
+        startDate = input("Enter a date you can start working: ")
+        paragraph = input("Enter a paragraph explaining why you are a good fit for the job: ")
+        ALL_JOBS[jobTitle]['applications'].add((globalUsername, graduationDate, startDate, paragraph))
+        print("You have successfully applied to the job")
+        return
 
 def saveJob():
-
+    #print the titles of all jobs and its saved status
+    for title in ALL_JOBS:
+        saved = ALL_JOBS[title]['saved']
+        if saved == True:
+            print(title, "Saved")
+        else:
+            print(title, "Not Saved")
+    
+    #prompt the user to choose a job
+    jobTitle = input("Enter the title of the job you want to save/unsave: ")
+    #check if the job title is valid
+    if jobTitle not in ALL_JOBS:
+        print("Invalid job title")
+        return
+    else:
+        #if the job is saved, unsave it
+        if ALL_JOBS[jobTitle]['saved'] == True:
+            ALL_JOBS[jobTitle]['saved'] = False
+            print("You have successfully unsaved the job")
+            return
+        #if the job is not saved, save it
+        elif ALL_JOBS[jobTitle]['saved'] == False:
+            ALL_JOBS[jobTitle]['saved'] = True
+            print("You have successfully saved the job")
+            return
 
 #Func to handle job titles listing
 def listingSearcḥ():
@@ -165,10 +215,11 @@ def listingSearcḥ():
     print("3. List of all jobs not applied to")
     print("4. List of saved jobs")
     print("5. Apply for a job")
-    print("6. Return to previous menu")
+    print("6. Save/Unsave a job")
+    print("7. Return to previous menu")
 
     # user input to choose option
-    userChoice = input("Select an option with '1', '2', '3', '4', '5', or '6': ")
+    userChoice = input("Select an option with '1', '2', '3', '4', '5', '6', or '7': ")
 
     # menu for listing search options
     if userChoice == '1':
@@ -279,6 +330,11 @@ def listingSearcḥ():
         listingSearcḥ()
     
     elif userChoice == '6':
+        #Save/Unsave a job
+        saveJob()
+        listingSearcḥ()
+
+    elif userChoice == '7':
         #Return to previous menu
         return
     
