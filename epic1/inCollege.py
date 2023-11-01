@@ -153,7 +153,7 @@ def postJob():
             'applications': set(), # add applications
             'saved': False # add saved attribute to track if job is saved
         }
-
+        print("You have successfully posted a job!")
         return
 
 def applyJob():
@@ -212,7 +212,7 @@ def saveJob():
             return
 
 #Func to handle job titles listing
-def listingSearcḥ():
+def listingSearchÌ£():
     print("1. List all posted jobs")
     print("2. List of all jobs applied to")
     print("3. List of all jobs not applied to")
@@ -229,7 +229,7 @@ def listingSearcḥ():
         # check if there are any jobs posted
         if len(ALL_JOBS) == 0:
             print("No jobs have been posted yet")
-            listingSearcḥ()
+            listingSearchÌ£()
         else:
             # print each job (title, description, employer, location, salary) and indicate if applicant has applied or not
             for title in ALL_JOBS:
@@ -248,12 +248,12 @@ def listingSearcḥ():
             apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
             if apply == "1":
                 applyJob()
-                listingSearcḥ()
+                listingSearchÌ£()
             elif apply == "2":
                 saveJob()
-                listingSearcḥ()
+                listingSearchÌ£()
             else:
-                listingSearcḥ()
+                listingSearchÌ£()
         
     elif userChoice == '2':
         #List all the job this applicant have applied
@@ -272,12 +272,12 @@ def listingSearcḥ():
         apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
         if apply == "1":
             applyJob()
-            listingSearcḥ()
+            listingSearchÌ£()
         elif apply == "2":
             saveJob()
-            listingSearcḥ()
+            listingSearchÌ£()
         else:
-            listingSearcḥ()
+            listingSearchÌ£()
 
     elif userChoice == '3':
         #list all the jobs this applicant have not applied
@@ -296,12 +296,12 @@ def listingSearcḥ():
         apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
         if apply == "1":
             applyJob()
-            listingSearcḥ()
+            listingSearchÌ£()
         if apply == "2":
             saveJob()
-            listingSearcḥ()
+            listingSearchÌ£()
         else:
-            listingSearcḥ()
+            listingSearchÌ£()
 
     elif userChoice == '4':
         #List of saved jobs
@@ -320,22 +320,22 @@ def listingSearcḥ():
         apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
         if apply == "1":
             applyJob()
-            listingSearcḥ()
+            listingSearchÌ£()
         if apply == "2":
             saveJob()
-            listingSearcḥ()
+            listingSearchÌ£()
         else:
-            listingSearcḥ()
+            listingSearchÌ£()
 
     elif userChoice == '5':
         #Apply for a job
         applyJob()
-        listingSearcḥ()
+        listingSearchÌ£()
     
     elif userChoice == '6':
         #Save/Unsave a job
         saveJob()
-        listingSearcḥ()
+        listingSearchÌ£()
 
     elif userChoice == '7':
         #Return to previous menu
@@ -343,7 +343,7 @@ def listingSearcḥ():
     
     else:
         print("Invalid. Please choose an option with '1', '2', '3', '4', '5', or '6'.\n")
-        listingSearcḥ()
+        listingSearchÌ£()
 
 
 # Job search/Internship Option
@@ -361,7 +361,7 @@ def jobSearch():
 
     # Option menu:
     if userChoice == '1':
-        listingSearcḥ()
+        listingSearcá¸¥()
         jobSearch()
     elif userChoice == '2':
         postJob()
@@ -524,7 +524,7 @@ def importantLinks():
 
     # menu for important links
     if userChoice == '1':
-        print("InCollege © copyright-2023")
+        print("InCollege Â© copyright-2023")
         importantLinks()
     elif userChoice == '2':
         print("InCollege aims to help students connect with each other and find jobs")
@@ -546,7 +546,7 @@ def importantLinks():
         print("We use cookies to enhance our overall user experience")
         importantLinks()
     elif userChoice == '7':
-        print("We Reserve the right to use the InCollege © name and logo")
+        print("We Reserve the right to use the InCollege Â© name and logo")
         importantLinks()
     elif userChoice == '8':
         print("Our brand policy is to ensure easy access to work opportunities to all students")
@@ -879,6 +879,7 @@ def viewFriendsProfiles():
                         print(f"Location: {ALL_PROFILES[friend_username]['job_location'][x]}")
                         print(f"Description: {ALL_PROFILES[friend_username]['job_description'][x]}")
                         print("\n")
+                        
 
                 elif friend_username not in ALL_PROFILES:
                     print("That friend has not made a profile yet")
@@ -1012,6 +1013,7 @@ def profileChange():
                 major = input("Error, major cant be empty, Enter a Major: ")
                 major = major.title()
             ALL_PROFILES[globalUsername]['major'] = major
+            print("You successfuly changed your major!")
             profileChange()
         elif userChoice == '3':
             university = input("Enter a new university: ")
@@ -1019,10 +1021,12 @@ def profileChange():
                 university = input("Error, university cant be empty, Enter a university: ")
                 university = university.title()
             ALL_PROFILES[globalUsername]['university'] = university
+            print("You successfuly changed your university!")
             profileChange()
         elif userChoice == '4':
             about = input("Enter new data for your About Page: ")
             ALL_PROFILES[globalUsername]['about'] = about
+            print("You successfuly changed your about section!")
             profileChange()
         elif userChoice == '5':
             # calls menu to add / delete jobs
@@ -1155,36 +1159,67 @@ def preLoggedInScreen():
 
 
 def deleteJob(username):
+    jobs_to_be_deleted = []
+
     #check if this username is the poster of any jobs
-    if len([job for job in ALL_JOBS if job['poster'] == username]) == 0:
-        print("You have not posted any jobs")
+    if not ALL_JOBS:
+        print("No jobs to delete.")
         return
     
-    #print all the jobs that the user is the poster
-    for i in range(len(ALL_JOBS)):
-        if ALL_JOBS[i]['poster'] == username:
-            print(f"{i+1}. {ALL_JOBS[i]['title']}")
-    #ask the user which job they want to delete
-    jobChoice = input("Enter the number of the job you want to delete: ")
-    #check if the input is a number
-    if jobChoice.isdigit():
-        #check if the input is in the range of the list
-        if int(jobChoice) in range(1, len(ALL_JOBS)+1):
-            #store applicants of this job so that they can be notified later when they are in the job section
-            ALL_APPLICANT_DELETED_JOBS.update(ALL_JOBS[int(jobChoice)-1]['applicants'])
-            
-            #delete the job
-            ALL_JOBS.pop(int(jobChoice)-1)
-            print("Job deleted")
-        else:
-            print("Invalid input")
-            deleteJob(username) #delete the job
+    for title in ALL_JOBS:
+        if ALL_JOBS[title]['poster'] == username:
+            has_posted_jobs = 0
+            break
+    
+    if has_posted_jobs == 1:
+        print("You have not posted any jobs")
+        return
 
+    
+    #print all the jobs that the user is the poster
+    for title in ALL_JOBS:
+        jobs_to_be_deleted.append(title)
+
+    i = 0
+    for jobs in jobs_to_be_deleted:
+        print(f"{i+1}.", jobs)
+        i += 1
+
+    #ask the user which job they want to delete
+    jobChoice = input("Enter the job you want to delete: ")
+
+    if jobChoice in jobs_to_be_deleted:
+        job_in_array = 0
+    
+    if job_in_array == 0:
+        ALL_APPLICANT_DELETED_JOBS.update(ALL_JOBS[jobChoice]['applicants'])
+
+        del ALL_JOBS[jobChoice]
+        print("Job deleted")
+        return
     else:
         print("Invalid input")
-        deleteJob(username)
+        deleteJob(username) #delete the job
+
+    #check if the input is a number
+    # if jobChoice.isdigit():
+    #     #check if the input is in the range of the list
+    #     if int(jobChoice) in range(1, len(ALL_JOBS)+1):
+    #         #store applicants of this job so that they can be notified later when they are in the job section
+    #         ALL_APPLICANT_DELETED_JOBS.update(ALL_JOBS[int(jobChoice)-1]['applicants'])
+            
+    #         #delete the job
+    #         ALL_JOBS.pop(int(jobChoice)-1)
+    #         print("Job deleted")
+    #     else:
+    #         print("Invalid input")
+    #         deleteJob(username) #delete the job
+
+    # else:
+    #     print("Invalid input")
+    #     deleteJob(username)
     
-    return
+    # return
 
 # function for when the user is logged in
 def loggedinScreen(username):
@@ -1278,3 +1313,4 @@ def initialScreen():
 # call main
 if __name__ == '__main__':
     initialScreen()
+
