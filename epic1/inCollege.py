@@ -8,6 +8,9 @@ ALL_STUDENT_ACCOUNTS = {}
 ALL_JOBS = {}
 ALL_PROFILES = {}
 
+#dictionary to store applicants and the applied job which has been deleted
+ALL_APPLICANT_DELETED_JOBS = set()
+
 # global variable to track current user (also used to check if user is logged in or not)
 globalUsername = None
 
@@ -135,7 +138,7 @@ def postJob():
     # sets 'poster' variable to the first and last name of the person who posted it with a space inbetween
     poster = ALL_STUDENT_ACCOUNTS[globalUsername]['firstName'] + ' ' + ALL_STUDENT_ACCOUNTS[globalUsername]['lastName']
 
-    if len(ALL_JOBS) >= 5:
+    if len(ALL_JOBS) >= 10: #Increase the number of jobs listing supported
         print("Sorry, all permitted jobs have been created. Please come back later.\n")
         return
     else:
@@ -145,14 +148,210 @@ def postJob():
             'employer': employer,
             'location': location,
             'salary': salary,
-            'poster': poster
+            'poster': poster,
+            'applicants': set(), # add applicants attributes to track job's applicants
+            'applications': set(), # add applications
+            'saved': False # add saved attribute to track if job is saved
         }
-
+        print("You have successfully posted a job!")
         return
+
+def applyJob():
+    #print the titles of all jobs
+    for title in ALL_JOBS:
+        print(title)
+    #prompt the user to choose a job
+    jobTitle = input("Enter the title of the job you want to apply to: ")
+    #check if the job title is valid, or if the job is already applied to, or if the user is the poster
+    if jobTitle not in ALL_JOBS:
+        print("Invalid job title")
+        return
+    elif globalUsername in ALL_JOBS[jobTitle]['applicants']:
+        print("You have already applied to this job")
+        return
+    elif globalUsername == ALL_JOBS[jobTitle]['poster']:
+        print("You cannot apply to a job you posted")
+        return
+    else:
+        #add the user to the job's applicants
+        ALL_JOBS[jobTitle]['applicants'].add(globalUsername)
+        
+        #Ask the user to enter a graduation date, a date they can start working, and a paragraph explaining why they are a good fit for the job, and store this application to the job
+        graduationDate = input("Enter your graduation date: ")
+        startDate = input("Enter a date you can start working: ")
+        paragraph = input("Enter a paragraph explaining why you are a good fit for the job: ")
+        ALL_JOBS[jobTitle]['applications'].add((globalUsername, graduationDate, startDate, paragraph))
+        print("You have successfully applied to the job")
+        return
+
+def saveJob():
+    #print the titles of all jobs and its saved status
+    for title in ALL_JOBS:
+        saved = ALL_JOBS[title]['saved']
+        if saved == True:
+            print(title, "Saved")
+        else:
+            print(title, "Not Saved")
+    
+    #prompt the user to choose a job
+    jobTitle = input("Enter the title of the job you want to save/unsave: ")
+    #check if the job title is valid
+    if jobTitle not in ALL_JOBS:
+        print("Invalid job title")
+        return
+    else:
+        #if the job is saved, unsave it
+        if ALL_JOBS[jobTitle]['saved'] == True:
+            ALL_JOBS[jobTitle]['saved'] = False
+            print("You have successfully unsaved the job")
+            return
+        #if the job is not saved, save it
+        elif ALL_JOBS[jobTitle]['saved'] == False:
+            ALL_JOBS[jobTitle]['saved'] = True
+            print("You have successfully saved the job")
+            return
+
+#Func to handle job titles listing
+def listingSearchÌ£():
+    print("1. List all posted jobs")
+    print("2. List of all jobs applied to")
+    print("3. List of all jobs not applied to")
+    print("4. List of saved jobs")
+    print("5. Apply for a job")
+    print("6. Save/Unsave a job")
+    print("7. Return to previous menu")
+
+    # user input to choose option
+    userChoice = input("Select an option with '1', '2', '3', '4', '5', '6', or '7': ")
+
+    # menu for listing search options
+    if userChoice == '1':
+        # check if there are any jobs posted
+        if len(ALL_JOBS) == 0:
+            print("No jobs have been posted yet")
+            listingSearchÌ£()
+        else:
+            # print each job (title, description, employer, location, salary) and indicate if applicant has applied or not
+            for title in ALL_JOBS:
+                description = ALL_JOBS[title]['description']
+                employer = ALL_JOBS[title]['employer']
+                location = ALL_JOBS[title]['location']
+                salary = ALL_JOBS[title]['salary']
+                poster = ALL_JOBS[title]['poster']
+                applicants = ALL_JOBS[title]['applicants']
+                if globalUsername in applicants:
+                    print(f'{title}, {description}, {employer}, {location}, {salary}, {poster}, Applied')
+                else:
+                    print(f'{title}, {description}, {employer}, {location}, {salary}, {poster}, Not Applied')
+            
+            #prompt the user for applying for job or saving job
+            apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
+            if apply == "1":
+                applyJob()
+                listingSearchÌ£()
+            elif apply == "2":
+                saveJob()
+                listingSearchÌ£()
+            else:
+                listingSearchÌ£()
+        
+    elif userChoice == '2':
+        #List all the job this applicant have applied
+        for title in ALL_JOBS:
+            applicants = ALL_JOBS[title]['applicants']
+            if globalUsername in applicants:
+                # print each job (title, description, employer, location, salary)
+                description = ALL_JOBS[title]['description']
+                employer = ALL_JOBS[title]['employer']
+                location = ALL_JOBS[title]['location']
+                salary = ALL_JOBS[title]['salary']
+
+                print(f'{title}, {description}, {employer}, {location}, {salary}')
+
+        #prompt the user for applying for job or saving job
+        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
+        if apply == "1":
+            applyJob()
+            listingSearchÌ£()
+        elif apply == "2":
+            saveJob()
+            listingSearchÌ£()
+        else:
+            listingSearchÌ£()
+
+    elif userChoice == '3':
+        #list all the jobs this applicant have not applied
+        for title in ALL_JOBS:
+            applicants = ALL_JOBS[title]['applicants']
+            if globalUsername not in applicants:
+                # print each job (title, description, employer, location, salary)
+                description = ALL_JOBS[title]['description']
+                employer = ALL_JOBS[title]['employer']
+                location = ALL_JOBS[title]['location']
+                salary = ALL_JOBS[title]['salary']
+
+                print(f'{title}, {description}, {employer}, {location}, {salary}')
+
+        #prompt the user for applying for job or saving job
+        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
+        if apply == "1":
+            applyJob()
+            listingSearchÌ£()
+        if apply == "2":
+            saveJob()
+            listingSearchÌ£()
+        else:
+            listingSearchÌ£()
+
+    elif userChoice == '4':
+        #List of saved jobs
+        for title in ALL_JOBS:
+            saved = ALL_JOBS[title]['saved']
+            if saved == True:
+                # print each job (title, description, employer, location, salary)
+                description = ALL_JOBS[title]['description']
+                employer = ALL_JOBS[title]['employer']
+                location = ALL_JOBS[title]['location']
+                salary = ALL_JOBS[title]['salary']
+
+                print(f'{title}, {description}, {employer}, {location}, {salary}')
+
+        #prompt the user for applying for job or saving job
+        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
+        if apply == "1":
+            applyJob()
+            listingSearchÌ£()
+        if apply == "2":
+            saveJob()
+            listingSearchÌ£()
+        else:
+            listingSearchÌ£()
+
+    elif userChoice == '5':
+        #Apply for a job
+        applyJob()
+        listingSearchÌ£()
+    
+    elif userChoice == '6':
+        #Save/Unsave a job
+        saveJob()
+        listingSearchÌ£()
+
+    elif userChoice == '7':
+        #Return to previous menu
+        return
+    
+    else:
+        print("Invalid. Please choose an option with '1', '2', '3', '4', '5', or '6'.\n")
+        listingSearchÌ£()
 
 
 # Job search/Internship Option
 def jobSearch():
+    #notify the user if a job they have applied has been deleted
+    if globalUsername in ALL_APPLICANT_DELETED_JOBS:
+        print("A job you have applied to has been deleted")
+
     print("1. Search for a job/internship")
     print("2. Post a job/internship")
     print("3. Return to main menu")
@@ -162,7 +361,7 @@ def jobSearch():
 
     # Option menu:
     if userChoice == '1':
-        print("\nunder construction\n")
+        listingSearcá¸¥()
         jobSearch()
     elif userChoice == '2':
         postJob()
@@ -325,7 +524,7 @@ def importantLinks():
 
     # menu for important links
     if userChoice == '1':
-        print("InCollege © copyright-2023")
+        print("InCollege Â© copyright-2023")
         importantLinks()
     elif userChoice == '2':
         print("InCollege aims to help students connect with each other and find jobs")
@@ -347,7 +546,7 @@ def importantLinks():
         print("We use cookies to enhance our overall user experience")
         importantLinks()
     elif userChoice == '7':
-        print("We Reserve the right to use the InCollege © name and logo")
+        print("We Reserve the right to use the InCollege Â© name and logo")
         importantLinks()
     elif userChoice == '8':
         print("Our brand policy is to ensure easy access to work opportunities to all students")
@@ -682,6 +881,7 @@ def viewFriendsProfiles():
                         print(f"Location: {ALL_PROFILES[friend_username]['job_location'][x]}")
                         print(f"Description: {ALL_PROFILES[friend_username]['job_description'][x]}")
                         print("\n")
+                        
 
                 elif friend_username not in ALL_PROFILES:
                     print("That friend has not made a profile yet")
@@ -815,6 +1015,7 @@ def profileChange():
                 major = input("Error, major cant be empty, Enter a Major: ")
                 major = major.title()
             ALL_PROFILES[globalUsername]['major'] = major
+            print("You successfuly changed your major!")
             profileChange()
         elif userChoice == '3':
             university = input("Enter a new university: ")
@@ -822,10 +1023,12 @@ def profileChange():
                 university = input("Error, university cant be empty, Enter a university: ")
                 university = university.title()
             ALL_PROFILES[globalUsername]['university'] = university
+            print("You successfuly changed your university!")
             profileChange()
         elif userChoice == '4':
             about = input("Enter new data for your About Page: ")
             ALL_PROFILES[globalUsername]['about'] = about
+            print("You successfuly changed your about section!")
             profileChange()
         elif userChoice == '5':
             # calls menu to add / delete jobs
@@ -957,6 +1160,69 @@ def preLoggedInScreen():
         preLoggedInScreen()
 
 
+def deleteJob(username):
+    jobs_to_be_deleted = []
+
+    #check if this username is the poster of any jobs
+    if not ALL_JOBS:
+        print("No jobs to delete.")
+        return
+    
+    for title in ALL_JOBS:
+        if ALL_JOBS[title]['poster'] == username:
+            has_posted_jobs = 0
+            break
+    
+    if has_posted_jobs == 1:
+        print("You have not posted any jobs")
+        return
+
+    
+    #print all the jobs that the user is the poster
+    for title in ALL_JOBS:
+        jobs_to_be_deleted.append(title)
+
+    i = 0
+    for jobs in jobs_to_be_deleted:
+        print(f"{i+1}.", jobs)
+        i += 1
+
+    #ask the user which job they want to delete
+    jobChoice = input("Enter the job you want to delete: ")
+
+    if jobChoice in jobs_to_be_deleted:
+        job_in_array = 0
+    
+    if job_in_array == 0:
+        ALL_APPLICANT_DELETED_JOBS.update(ALL_JOBS[jobChoice]['applicants'])
+
+        del ALL_JOBS[jobChoice]
+        print("Job deleted")
+        return
+    else:
+        print("Invalid input")
+        deleteJob(username) #delete the job
+
+    #check if the input is a number
+    # if jobChoice.isdigit():
+    #     #check if the input is in the range of the list
+    #     if int(jobChoice) in range(1, len(ALL_JOBS)+1):
+    #         #store applicants of this job so that they can be notified later when they are in the job section
+    #         ALL_APPLICANT_DELETED_JOBS.update(ALL_JOBS[int(jobChoice)-1]['applicants'])
+            
+    #         #delete the job
+    #         ALL_JOBS.pop(int(jobChoice)-1)
+    #         print("Job deleted")
+    #     else:
+    #         print("Invalid input")
+    #         deleteJob(username) #delete the job
+
+    # else:
+    #     print("Invalid input")
+    #     deleteJob(username)
+    
+    # return
+
 # function for when the user is logged in
 def loggedinScreen(username):
     # set isLoggedIn Boolean to true
@@ -973,10 +1239,11 @@ def loggedinScreen(username):
     print("5. View InCollege Important Links")
     print("6. Show my network")
     print("7. View/Edit profiles")
-    print("8. log out")
+    print("8. Delete a job")
+    print("9. log out")
 
     # User choose an option
-    userChoice = input("Select an option with '1', through '8': ")
+    userChoice = input("Select an option with '1', through '9': ")
 
     # Option menu:
     if userChoice == '1':
@@ -1001,6 +1268,9 @@ def loggedinScreen(username):
         profileMenu()
         loggedinScreen(username)
     elif userChoice == '8':
+        deleteJob(username)
+        loggedinScreen(username)
+    elif userChoice == '9':
         print("\nYou have successfully logged out\n")
         globalUsername = None
         return
@@ -1045,3 +1315,4 @@ def initialScreen():
 # call main
 if __name__ == '__main__':
     initialScreen()
+
