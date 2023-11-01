@@ -1203,25 +1203,24 @@ def deleteJob(username):
         print("Invalid input")
         deleteJob(username) #delete the job
 
-    #check if the input is a number
-    # if jobChoice.isdigit():
-    #     #check if the input is in the range of the list
-    #     if int(jobChoice) in range(1, len(ALL_JOBS)+1):
-    #         #store applicants of this job so that they can be notified later when they are in the job section
-    #         ALL_APPLICANT_DELETED_JOBS.update(ALL_JOBS[int(jobChoice)-1]['applicants'])
+    check if the input is a number
+     if jobChoice.isdigit():
+         #check if the input is in the range of the list
+         if int(jobChoice) in range(1, len(ALL_JOBS)+1):
+             #store applicants of this job so that they can be notified later when they are in the job section
+             ALL_APPLICANT_DELETED_JOBS.update(ALL_JOBS[int(jobChoice)-1]['applicants'])
             
-    #         #delete the job
-    #         ALL_JOBS.pop(int(jobChoice)-1)
-    #         print("Job deleted")
-    #     else:
-    #         print("Invalid input")
-    #         deleteJob(username) #delete the job
+             #delete the job
+             ALL_JOBS.pop(int(jobChoice)-1)
+             print("Job deleted")
+         else:
+             print("Invalid input")
+             deleteJob(username) #delete the job
 
-    # else:
-    #     print("Invalid input")
-    #     deleteJob(username)
-    
-    # return
+     else:
+         print("Invalid input")
+         deleteJob(username)
+     return
 
 # function for when the user is logged in
 def loggedinScreen(username):
