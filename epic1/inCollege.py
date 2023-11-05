@@ -53,7 +53,7 @@ def createAccount():
     while not major:
         major = input("Invalid, Enter your major: ")
 
- # Add a choice for membership tier during signup
+    # Add a choice for membership tier during signup
     print("Choose your membership tier:")
     print("1. Standard (Free)")
     print("2. Plus ($10/month)")
@@ -1299,7 +1299,46 @@ def viewInbox(username):
                 del MESSAGES[username]['inbox']
                 print("Message deleted\n")
     return
-            
+
+def messagePlus(username): #function for plus member messaging
+    #check if the user is a plus member
+    if ALL_STUDENT_ACCOUNTS[username]['plus'] == False:
+        print("You are not a plus member, you cannot message people\n")
+        return
+
+    friendList = []
+
+    #get the list of all of the students who are in the system
+    for student in ALL_STUDENT_ACCOUNTS:
+        friendList.append(student)
+    
+    #printing out friends
+    for username in enumerate(friendList):
+        last_name = ALL_STUDENT_ACCOUNTS[username]['lastName']
+        first_name = ALL_STUDENT_ACCOUNTS[username]['firstName']
+        print(f"{first_name} {last_name}'s username: {username}")
+    
+    sendToUser = input("Enter the username you want to send a message to or type 'exit' to go back: ")
+
+    #plus members can message anyone
+    if sendToUser == "exit":
+        return
+    elif sendToUser in friendList:
+        message = input("Enter the message you would like to send: \n")
+        MESSAGES[sendToUser] = { 
+            'inbox': {
+            'sender': username,
+            'read': False,
+            'message': message,
+            }
+        }
+        print("Message sent\n")
+        return
+    else:
+        print("Invalid input try again\n")
+        messagePlus(username)
+
+
 # function for when the user is logged in
 def loggedinScreen(username):
     # set isLoggedIn Boolean to true
@@ -1323,9 +1362,10 @@ def loggedinScreen(username):
     print("9. log out")
     print("10. Message Friends")
     print("11. View Inbox")
+    print("12. Message (Plus account only)")
 
     # User choose an option
-    userChoice = input("Select an option with '1', through '9': ")
+    userChoice = input("Select an option with '1', through '12': ")
 
     # Option menu:
     if userChoice == '1':
@@ -1362,8 +1402,11 @@ def loggedinScreen(username):
     elif userChoice == '11':
         viewInbox(username)
         loggedinScreen(username)
+    elif userChoice == '12':
+        messagePlus(username)
+        loggedinScreen(username)
     else:
-        print("Invalid. Please choose a valid option of either '1', through '8'.\n")
+        print("Invalid. Please choose a valid option of either '1', through '11'.\n")
         loggedinScreen(username)
 
 
