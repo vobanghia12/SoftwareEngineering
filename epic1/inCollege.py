@@ -1407,7 +1407,7 @@ def loggedinScreen(username):
         messagePlus(username)
         loggedinScreen(username)
     else:
-        print("Invalid. Please choose a valid option of either '1', through '11'.\n")
+        print("Invalid. Please choose a valid option of either '1', through '12'.\n")
         loggedinScreen(username)
 
 

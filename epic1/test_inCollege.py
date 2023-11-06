@@ -475,5 +475,28 @@ class TestInCollegeFeatures(unittest.TestCase):
         self.assertIn(expected_output, out.getvalue().strip())
 
 
+#Test case for Message without plusmembership
+    @patch('inCollege.ALL_STUDENT_ACCOUNTS', {'wyoming55': {'plus': False}})
+    @patch('builtins.input', side_effect=['wyoming44', 'Hello'])
+    def testMessagePlusWithoutPlusMembership(self, mock_input):
+        expected_output = "You are not a plus member, you cannot message people"
+        out = io.StringIO()
+        with redirect_stdout(out):
+            inCollege.messagePlus('wyoming55')
+        self.assertIn(expected_output, out.getvalue().strip())
+
+# Test case for messagePlus function
+@patch('inCollege.ALL_STUDENT_ACCOUNTS', {'wyoming55': {'plus': True}})
+@patch('builtins.input', side_effect=['wyoming44', 'Hello'])
+def testMessagePlusWithPlusMembership(self, mock_input):
+    expected_output = "Message sent"
+    out = io.StringIO()
+    with redirect_stdout(out):
+        inCollege.messagePlus('wyoming55')
+    self.assertIn(expected_output, out.getvalue().strip())
+
+
+
+
 if __name__ == '__main__':
     unittest.main()
