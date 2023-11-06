@@ -1,0 +1,142 @@
+commit 045fd0dff74bd78cb2a4777a8ec6dc5bac93aa59
+Author: Nghia Vo <vobanghia12@gmail.com>
+Date:   Sun Oct 29 12:46:45 2023 -0400
+
+    Epic 4 test completed
+
+commit 9d2c9399b81e3ca3b08249022c457ef28f3c5657
+Merge: 7c5cdb5 bc8918d
+Author: Jason Vo <102493073+voxuanthang203@users.noreply.github.com>
+Date:   Sun Oct 29 00:15:36 2023 -0400
+
+    Merge pull request #2 from vobanghia12/Jason
+    
+    Jason
+
+commit bc8918d4d69c04c1483f8383ccd48fb59b16a041
+Merge: 6b8642f 45bd63b
+Author: Jason Vo <102493073+voxuanthang203@users.noreply.github.com>
+Date:   Sun Oct 29 00:14:13 2023 -0400
+
+    Merge remote-tracking branch 'origin/Soroush' into Jason
+
+commit 6b8642f6f3db0047f91c8b7623604b2de6ec349d
+Author: Jason Vo <102493073+voxuanthang203@users.noreply.github.com>
+Date:   Sun Oct 29 00:12:54 2023 -0400
+
+    Merging the branches
+
+commit 30981c4de009ff11663271d79d55615c82f1bc46
+Merge: d59a232 c0b4adb
+Author: Jason Vo <102493073+voxuanthang203@users.noreply.github.com>
+Date:   Sun Oct 29 00:11:03 2023 -0400
+
+    Merge remote-tracking branch 'origin/Soroush' into Jason
+
+commit 45bd63bc4f0347a28b349c03aff42b67fb0e4725
+Author: SoroushTayebi <89043336+SoroushTayebi@users.noreply.github.com>
+Date:   Sun Oct 29 00:01:39 2023 -0400
+
+    Epic 4 Complete
+
+commit c0b4adb35b9b0bbcb3efa2417e9e4b4204d57f5a
+Author: SoroushTayebi <89043336+SoroushTayebi@users.noreply.github.com>
+Date:   Sat Oct 28 23:13:28 2023 -0400
+
+    Epic 4 A with added comments and additional fixes
+
+commit 203d2e891905d448b99b63b4deae6cc2d66f1a15
+Author: SoroushTayebi <89043336+SoroushTayebi@users.noreply.github.com>
+Date:   Sat Oct 28 22:24:25 2023 -0400
+
+    Epic 4 A fixed
+
+commit 0822e5e5893be7912ab49dcd66b642d5b4669cb4
+Author: SoroushTayebi <89043336+SoroushTayebi@users.noreply.github.com>
+Date:   Sat Oct 28 22:06:43 2023 -0400
+
+    Epic 4 A
+
+commit 62e84757f220663344b253eb32224c6db6046243
+Author: SoroushTayebi <89043336+SoroushTayebi@users.noreply.github.com>
+Date:   Sat Oct 28 20:59:58 2023 -0400
+
+    Epic 3 final (fixed a small issue)
+
+commit 2514dc64c6bb30b0195bf14bceff35882793c8c5
+Author: SoroushTayebi <89043336+SoroushTayebi@users.noreply.github.com>
+Date:   Sat Oct 28 20:53:33 2023 -0400
+
+    Epic 3 complete
+
+commit d59a23232a2d76609317babc545e10d1672f125b
+Author: Jason Vo <102493073+voxuanthang203@users.noreply.github.com>
+Date:   Sat Oct 28 20:15:45 2023 -0400
+
+    Add posting job - finished epic 2
+
+commit 4f0d9d30493d8e6e08c23042c7854bd55f0f7760
+Author: Jason Vo <102493073+voxuanthang203@users.noreply.github.com>
+Date:   Sat Oct 28 20:07:32 2023 -0400
+
+    Missing last function for Epic 2 - Job Posting
+
+commit 2f259afacda7efef209feb87b847169c4dc92cd9
+Author: SoroushTayebi <89043336+SoroushTayebi@users.noreply.github.com>
+Date:   Sat Oct 28 17:53:27 2023 -0400
+
+    Epic 3 Part A Complete (minus epic 2)
+
+commit ec7b7b6879a74c6133ac41d6e4018858cae66b90
+Author: SoroushTayebi <89043336+SoroushTayebi@users.noreply.github.com>
+Date:   Wed Oct 25 20:35:57 2023 -0400
+
+    epic 3 part A functions complete, need to add access to them in initial and logged in screens
+
+commit 932a1dfdb504794d581856ca03e3bcc2e89115b5
+Author: SoroushTayebi <89043336+SoroushTayebi@users.noreply.github.com>
+Date:   Wed Oct 25 19:53:37 2023 -0400
+
+    epic 3 part a progress
+    
+    - added boolean to check if logged in
+    - added username as parameter to loggedinScreen function to track current user
+    - made login() function
+    - added general and useful links functions
+    To do:
+    - finish general menu
+    - finish useful links menu
+    - create important links menu
+
+commit b0263691e3c94f587bef8a9ea2b72911e25e189b
+Author: SoroushTayebi <89043336+SoroushTayebi@users.noreply.github.com>
+Date:   Wed Oct 25 18:10:59 2023 -0400
+
+    make functions more independent
+
+commit 5629310f6da15ff89ba6b96b79c8472eaf7854bb
+Author: Jason Vo <102493073+voxuanthang203@users.noreply.github.com>
+Date:   Tue Oct 24 22:28:21 2023 -0400
+
+    Delete redundant main func
+
+commit 7c5cdb52285b512cbe1ef81721dffb599ba6bd8f
+Merge: 842751d 2b1ea46
+Author: Jason Vo <102493073+voxuanthang203@users.noreply.github.com>
+Date:   Tue Oct 24 22:15:04 2023 -0400
+
+    Merge pull request #1 from vobanghia12/Jason
+    
+    Epic 1 - Run tests
+
+commit 2b1ea46a53bb1d284da7a3060e155c5d2620af78
+Author: Jason Vo <102493073+voxuanthang203@users.noreply.github.com>
+Date:   Tue Oct 24 22:11:14 2023 -0400
+
+    Epic 1 - Run tests
+
+commit 842751dd5fa19c6f6f18ff384e14a1cd0d0d71de
+Author: Jason Vo <102493073+voxuanthang203@users.noreply.github.com>
+Date:   Tue Oct 24 22:05:06 2023 -0400
+
+    Epic 1 - Finish

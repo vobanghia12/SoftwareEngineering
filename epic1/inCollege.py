@@ -17,6 +17,8 @@ globalUsername = None
 
 searchList = []
 
+friendList = []
+
 
 # function for creating an account
 def createAccount():
@@ -192,7 +194,7 @@ def applyJob():
     else:
         #add the user to the job's applicants
         ALL_JOBS[jobTitle]['applicants'].add(globalUsername)
-        
+
         #Ask the user to enter a graduation date, a date they can start working, and a paragraph explaining why they are a good fit for the job, and store this application to the job
         graduationDate = input("Enter your graduation date: ")
         startDate = input("Enter a date you can start working: ")
@@ -209,7 +211,7 @@ def saveJob():
             print(title, "Saved")
         else:
             print(title, "Not Saved")
-    
+
     #prompt the user to choose a job
     jobTitle = input("Enter the title of the job you want to save/unsave: ")
     #check if the job title is valid
@@ -260,7 +262,7 @@ def listingSearch():
                     print(f'{title}, {description}, {employer}, {location}, {salary}, {poster}, Applied')
                 else:
                     print(f'{title}, {description}, {employer}, {location}, {salary}, {poster}, Not Applied')
-            
+
             #prompt the user for applying for job or saving job
             apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
             if apply == "1":
@@ -271,7 +273,7 @@ def listingSearch():
                 listingSearch()
             else:
                 listingSearch()
-        
+
     elif userChoice == '2':
         #List all the job this applicant have applied
         for title in ALL_JOBS:
@@ -348,7 +350,7 @@ def listingSearch():
         #Apply for a job
         applyJob()
         listingSearch()
-    
+
     elif userChoice == '6':
         #Save/Unsave a job
         saveJob()
@@ -357,7 +359,7 @@ def listingSearch():
     elif userChoice == '7':
         #Return to previous menu
         return
-    
+
     else:
         print("Invalid. Please choose an option with '1', '2', '3', '4', '5', or '6'.\n")
         listingSearch()
@@ -847,11 +849,11 @@ def viewFriendsProfiles():
     if not friendList:
         print("You have not added any friends yet")
         return
-    
+
     for friend in ALL_STUDENT_ACCOUNTS[globalUsername]['friends']:
         friendList.append(friend)
     # true if friendList is empty
-    
+
 
     # if user has friends
     if friendList:
@@ -898,7 +900,7 @@ def viewFriendsProfiles():
                         print(f"Location: {ALL_PROFILES[friend_username]['job_location'][x]}")
                         print(f"Description: {ALL_PROFILES[friend_username]['job_description'][x]}")
                         print("\n")
-                        
+
 
                 elif friend_username not in ALL_PROFILES:
                     print("That friend has not made a profile yet")
@@ -1184,17 +1186,17 @@ def deleteJob(username):
     if not ALL_JOBS:
         print("No jobs to delete.")
         return
-    
+
     for title in ALL_JOBS:
         if ALL_JOBS[title]['poster'] == username:
             has_posted_jobs = 0
             break
-    
+
     if has_posted_jobs == 1:
         print("You have not posted any jobs")
         return
 
-    
+
     #print all the jobs that the user is the poster
     for title in ALL_JOBS:
         jobs_to_be_deleted.append(title)
@@ -1209,7 +1211,7 @@ def deleteJob(username):
 
     if jobChoice in jobs_to_be_deleted:
         job_in_array = 0
-    
+
     if job_in_array == 0:
         ALL_APPLICANT_DELETED_JOBS.update(ALL_JOBS[jobChoice]['applicants'])
 
@@ -1226,7 +1228,7 @@ def deleteJob(username):
         if int(jobChoice) in range(1, len(ALL_JOBS)+1):
             #store applicants of this job so that they can be notified later when they are in the job section
             ALL_APPLICANT_DELETED_JOBS.update(ALL_JOBS[int(jobChoice)-1]['applicants'])
-        
+
             #delete the job
             ALL_JOBS.pop(int(jobChoice)-1)
             print("Job deleted")
@@ -1246,14 +1248,13 @@ def sendMessage(username):
     for friend in ALL_STUDENT_ACCOUNTS[globalUsername]['friends']:
         friendList.append(friend)
 
-    #printing out friends 
-    for username in enumerate(friendList):
+    #printing out friends
+    for username in friendList:
         last_name = ALL_STUDENT_ACCOUNTS[username]['lastName']
         first_name = ALL_STUDENT_ACCOUNTS[username]['firstName']
         print(f"{first_name} {last_name}'s username: {username}")
 
     sendToUser = input("Enter the username you want to send a message to or type 'exit' to go back: ")
-
     if sendToUser not in ALL_STUDENT_ACCOUNTS[globalUsername]['friends']:
         print("I'm sorry, you are not friends with that person\n")
         sendMessage(username)
@@ -1261,7 +1262,7 @@ def sendMessage(username):
         return
     elif sendToUser in ALL_STUDENT_ACCOUNTS[globalUsername]['friends']:
         message = input("Enter the message you would like to send: \n")
-        MESSAGES[sendToUser] = { 
+        MESSAGES[sendToUser] = {
             'inbox': {
             'sender': username,
             'read': False,
@@ -1285,8 +1286,8 @@ def viewInbox(username):
             if sendChoice == 'y':
                 message = input("Enter the message you would like to send: \n")
                 sendToUser = inbox['sender']
-                MESSAGES[sendToUser] = { 
-                      'inbox': 
+                MESSAGES[sendToUser] = {
+                      'inbox':
                     {
                         'sender': username,
                         'read': False,
@@ -1311,13 +1312,13 @@ def messagePlus(username): #function for plus member messaging
     #get the list of all of the students who are in the system
     for student in ALL_STUDENT_ACCOUNTS:
         friendList.append(student)
-    
+
     #printing out friends
     for username in enumerate(friendList):
         last_name = ALL_STUDENT_ACCOUNTS[username]['lastName']
         first_name = ALL_STUDENT_ACCOUNTS[username]['firstName']
         print(f"{first_name} {last_name}'s username: {username}")
-    
+
     sendToUser = input("Enter the username you want to send a message to or type 'exit' to go back: ")
 
     #plus members can message anyone
@@ -1325,7 +1326,7 @@ def messagePlus(username): #function for plus member messaging
         return
     elif sendToUser in friendList:
         message = input("Enter the message you would like to send: \n")
-        MESSAGES[sendToUser] = { 
+        MESSAGES[sendToUser] = {
             'inbox': {
             'sender': username,
             'read': False,
