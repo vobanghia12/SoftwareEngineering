@@ -19,6 +19,7 @@ searchList = []
 
 friendList = []
 
+numberOfDays = 0
 
 # function for creating an account
 def createAccount():
@@ -201,6 +202,8 @@ def applyJob():
         paragraph = input("Enter a paragraph explaining why you are a good fit for the job: ")
         ALL_JOBS[jobTitle]['applications'].add((globalUsername, graduationDate, startDate, paragraph))
         print("You have successfully applied to the job")
+        global numberOfDays
+        numberOfDays = 0
         return
 
 def saveJob():
@@ -371,10 +374,22 @@ def jobSearch():
     if globalUsername in ALL_APPLICANT_DELETED_JOBS:
         print("A job you have applied to has been deleted")
 
+    #checks how many jobs have been applied
+    numberOfAppliedJobs = 0
+
+    for title in ALL_JOBS:
+        applicants = ALL_JOBS[title]['applicants']
+        if globalUsername in applicants:
+            numberOfAppliedJobs += 1
+    
+    if numberOfAppliedJobs == 0:
+        print(f"You have currently applied for {numberOfAppliedJobs} jobs")
+
     print("1. Search for a job/internship")
     print("2. Post a job/internship")
     print("3. Return to main menu")
 
+    
     # User choose an option
     userChoice = input("Select an option with '1', '2', or '3': ")
 
@@ -1342,13 +1357,20 @@ def messagePlus(username): #function for plus member messaging
 
 # function for when the user is logged in
 def loggedinScreen(username):
+
+
     # set isLoggedIn Boolean to true
     globalUsername = username
 
+    #notifications
+    if numberOfDays > 7:
+        print("Remember - you're going to want to have a job when you graduate. Make sure that you start to apply for jobs today!\n")
     if ALL_STUDENT_ACCOUNTS[username]['requests'] is not None:
-        print("\nYou have pending friend requests! Go to Show my network to view")
+        print("You have pending friend requests! Go to Show my network to view\n")
+    if ALL_PROFILES[username] is None:
+        print("Don't forget to create a profile\n")
     if MESSAGES[username] is not None:
-        print("\nYou have messages in your inbox, go to 'View Inbox' to view it")
+        print("\nYou have messages waiting for you")
 
     # other submenu would go here
     print(" ")
@@ -1395,6 +1417,9 @@ def loggedinScreen(username):
         loggedinScreen(username)
     elif userChoice == '9':
         print("\nYou have successfully logged out\n")
+        # when they log off assume a day has passed
+        global numberOfDays
+        numberOfDays += 1
         globalUsername = None
         return
     elif userChoice == '10':
