@@ -7,6 +7,7 @@ Fall '23
 ALL_STUDENT_ACCOUNTS = {}
 ALL_JOBS = {}
 ALL_PROFILES = {}
+MESSAGES = {}
 
 #dictionary to store applicants and the applied job which has been deleted
 ALL_APPLICANT_DELETED_JOBS = set()
@@ -15,6 +16,8 @@ ALL_APPLICANT_DELETED_JOBS = set()
 globalUsername = None
 
 searchList = []
+
+friendList = []
 
 
 # function for creating an account
@@ -52,6 +55,20 @@ def createAccount():
     while not major:
         major = input("Invalid, Enter your major: ")
 
+    # Add a choice for membership tier during signup
+    print("Choose your membership tier:")
+    print("1. Standard (Free)")
+    print("2. Plus ($10/month)")
+    membership_choice = input("Enter '1' for Standard or '2' for Plus: ")
+
+    if membership_choice == '1':
+        membership_tier = 'Standard'
+        billing_status = 'Free'  # No billing for Standard members
+    elif membership_choice == '2':
+        membership_tier = 'Plus'
+        billing_status = 'Active'  # Plus members are billed $10/month
+        # Implement billing logic here to charge $10 from the student's account
+
     # Key is the username, values are password, firstName, lastName, university, major, Language
     # also holds booleans for SMS, Email and Advertising, as well as lists for friends and friend requests
     ALL_STUDENT_ACCOUNTS[username] = {
@@ -60,12 +77,14 @@ def createAccount():
         'lastName': lastName,
         'university': university,
         'major': major,
+        'membership_tier': membership_tier,
+        'billing_status': billing_status,
         'Language': 'English',
         'SMS': True,
         'Email': True,
         'Advertising': True,
         'friends': [],
-        'requests': []
+        'requests': [],
     }
 
     print("Account has been created!\n")
@@ -175,7 +194,7 @@ def applyJob():
     else:
         #add the user to the job's applicants
         ALL_JOBS[jobTitle]['applicants'].add(globalUsername)
-        
+
         #Ask the user to enter a graduation date, a date they can start working, and a paragraph explaining why they are a good fit for the job, and store this application to the job
         graduationDate = input("Enter your graduation date: ")
         startDate = input("Enter a date you can start working: ")
@@ -192,7 +211,7 @@ def saveJob():
             print(title, "Saved")
         else:
             print(title, "Not Saved")
-    
+
     #prompt the user to choose a job
     jobTitle = input("Enter the title of the job you want to save/unsave: ")
     #check if the job title is valid
@@ -212,7 +231,7 @@ def saveJob():
             return
 
 #Func to handle job titles listing
-def listingSearchÌ£():
+def listingSearch():
     print("1. List all posted jobs")
     print("2. List of all jobs applied to")
     print("3. List of all jobs not applied to")
@@ -229,7 +248,7 @@ def listingSearchÌ£():
         # check if there are any jobs posted
         if len(ALL_JOBS) == 0:
             print("No jobs have been posted yet")
-            listingSearchÌ£()
+            listingSearch()
         else:
             # print each job (title, description, employer, location, salary) and indicate if applicant has applied or not
             for title in ALL_JOBS:
@@ -243,18 +262,18 @@ def listingSearchÌ£():
                     print(f'{title}, {description}, {employer}, {location}, {salary}, {poster}, Applied')
                 else:
                     print(f'{title}, {description}, {employer}, {location}, {salary}, {poster}, Not Applied')
-            
+
             #prompt the user for applying for job or saving job
             apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
             if apply == "1":
                 applyJob()
-                listingSearchÌ£()
+                listingSearch()
             elif apply == "2":
                 saveJob()
-                listingSearchÌ£()
+                listingSearch()
             else:
-                listingSearchÌ£()
-        
+                listingSearch()
+
     elif userChoice == '2':
         #List all the job this applicant have applied
         for title in ALL_JOBS:
@@ -272,12 +291,12 @@ def listingSearchÌ£():
         apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
         if apply == "1":
             applyJob()
-            listingSearchÌ£()
+            listingSearch()
         elif apply == "2":
             saveJob()
-            listingSearchÌ£()
+            listingSearch()
         else:
-            listingSearchÌ£()
+            listingSearch()
 
     elif userChoice == '3':
         #list all the jobs this applicant have not applied
@@ -296,12 +315,12 @@ def listingSearchÌ£():
         apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
         if apply == "1":
             applyJob()
-            listingSearchÌ£()
+            listingSearch()
         if apply == "2":
             saveJob()
-            listingSearchÌ£()
+            listingSearch()
         else:
-            listingSearchÌ£()
+            listingSearch()
 
     elif userChoice == '4':
         #List of saved jobs
@@ -320,30 +339,30 @@ def listingSearchÌ£():
         apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
         if apply == "1":
             applyJob()
-            listingSearchÌ£()
+            listingSearch()
         if apply == "2":
             saveJob()
-            listingSearchÌ£()
+            listingSearch()
         else:
-            listingSearchÌ£()
+            listingSearch()
 
     elif userChoice == '5':
         #Apply for a job
         applyJob()
-        listingSearchÌ£()
-    
+        listingSearch()
+
     elif userChoice == '6':
         #Save/Unsave a job
         saveJob()
-        listingSearchÌ£()
+        listingSearch()
 
     elif userChoice == '7':
         #Return to previous menu
         return
-    
+
     else:
         print("Invalid. Please choose an option with '1', '2', '3', '4', '5', or '6'.\n")
-        listingSearchÌ£()
+        listingSearch()
 
 
 # Job search/Internship Option
@@ -361,7 +380,7 @@ def jobSearch():
 
     # Option menu:
     if userChoice == '1':
-        listingSearcá¸¥()
+        listingSearch()
         jobSearch()
     elif userChoice == '2':
         postJob()
@@ -830,11 +849,11 @@ def viewFriendsProfiles():
     if not friendList:
         print("You have not added any friends yet")
         return
-    
+
     for friend in ALL_STUDENT_ACCOUNTS[globalUsername]['friends']:
         friendList.append(friend)
     # true if friendList is empty
-    
+
 
     # if user has friends
     if friendList:
@@ -881,7 +900,7 @@ def viewFriendsProfiles():
                         print(f"Location: {ALL_PROFILES[friend_username]['job_location'][x]}")
                         print(f"Description: {ALL_PROFILES[friend_username]['job_description'][x]}")
                         print("\n")
-                        
+
 
                 elif friend_username not in ALL_PROFILES:
                     print("That friend has not made a profile yet")
@@ -1167,17 +1186,17 @@ def deleteJob(username):
     if not ALL_JOBS:
         print("No jobs to delete.")
         return
-    
+
     for title in ALL_JOBS:
         if ALL_JOBS[title]['poster'] == username:
             has_posted_jobs = 0
             break
-    
+
     if has_posted_jobs == 1:
         print("You have not posted any jobs")
         return
 
-    
+
     #print all the jobs that the user is the poster
     for title in ALL_JOBS:
         jobs_to_be_deleted.append(title)
@@ -1192,7 +1211,7 @@ def deleteJob(username):
 
     if jobChoice in jobs_to_be_deleted:
         job_in_array = 0
-    
+
     if job_in_array == 0:
         ALL_APPLICANT_DELETED_JOBS.update(ALL_JOBS[jobChoice]['applicants'])
 
@@ -1203,24 +1222,123 @@ def deleteJob(username):
         print("Invalid input")
         deleteJob(username) #delete the job
 
-    check if the input is a number
-     if jobChoice.isdigit():
-         #check if the input is in the range of the list
-         if int(jobChoice) in range(1, len(ALL_JOBS)+1):
-             #store applicants of this job so that they can be notified later when they are in the job section
-             ALL_APPLICANT_DELETED_JOBS.update(ALL_JOBS[int(jobChoice)-1]['applicants'])
-            
-             #delete the job
-             ALL_JOBS.pop(int(jobChoice)-1)
-             print("Job deleted")
-         else:
-             print("Invalid input")
-             deleteJob(username) #delete the job
+    #check if the input is a number
+    if jobChoice.isdigit():
+        #check if the input is in the range of the list
+        if int(jobChoice) in range(1, len(ALL_JOBS)+1):
+            #store applicants of this job so that they can be notified later when they are in the job section
+            ALL_APPLICANT_DELETED_JOBS.update(ALL_JOBS[int(jobChoice)-1]['applicants'])
 
-     else:
-         print("Invalid input")
-         deleteJob(username)
-     return
+            #delete the job
+            ALL_JOBS.pop(int(jobChoice)-1)
+            print("Job deleted")
+        else:
+            print("Invalid input")
+            deleteJob(username) #delete the job
+
+    else:
+        print("Invalid input")
+        deleteJob(username)
+    return
+
+def sendMessage(username):
+    friendList = []
+
+    print("Here are a list of friends you can message: \n")
+    for friend in ALL_STUDENT_ACCOUNTS[globalUsername]['friends']:
+        friendList.append(friend)
+
+    #printing out friends
+    for username in friendList:
+        last_name = ALL_STUDENT_ACCOUNTS[username]['lastName']
+        first_name = ALL_STUDENT_ACCOUNTS[username]['firstName']
+        print(f"{first_name} {last_name}'s username: {username}")
+
+    sendToUser = input("Enter the username you want to send a message to or type 'exit' to go back: ")
+    if sendToUser not in ALL_STUDENT_ACCOUNTS[globalUsername]['friends']:
+        print("I'm sorry, you are not friends with that person\n")
+        sendMessage(username)
+    elif sendToUser == "exit":
+        return
+    elif sendToUser in ALL_STUDENT_ACCOUNTS[globalUsername]['friends']:
+        message = input("Enter the message you would like to send: \n")
+        MESSAGES[sendToUser] = {
+            'inbox': {
+            'sender': username,
+            'read': False,
+            'message': message,
+            }
+        }
+        print("Message sent\n")
+        return
+    else:
+        print("Invalid input try again\n")
+        sendMessage(username)
+
+def viewInbox(username):
+    for inbox in MESSAGES[username]['inbox']:
+        if inbox['read'] == False:
+            print("Here is a message your friend sent you: \n")
+            print(inbox['message'])
+            inbox['read'] = True
+            print("\n")
+            sendChoice = input("Do you want to respond? (y/n)").lower()
+            if sendChoice == 'y':
+                message = input("Enter the message you would like to send: \n")
+                sendToUser = inbox['sender']
+                MESSAGES[sendToUser] = {
+                      'inbox':
+                    {
+                        'sender': username,
+                        'read': False,
+                        'message': message,
+                    }
+                }
+                print("Message sent\n")
+            deleteChoice = input("Do you want to delete this message? (y/n)").lower()
+            if deleteChoice == 'y':
+                del MESSAGES[username]['inbox']
+                print("Message deleted\n")
+    return
+
+def messagePlus(username): #function for plus member messaging
+    #check if the user is a plus member
+    if ALL_STUDENT_ACCOUNTS[username]['plus'] == False:
+        print("You are not a plus member, you cannot message people\n")
+        return
+
+    friendList = []
+
+    #get the list of all of the students who are in the system
+    for student in ALL_STUDENT_ACCOUNTS:
+        friendList.append(student)
+
+    #printing out friends
+    for username in enumerate(friendList):
+        last_name = ALL_STUDENT_ACCOUNTS[username]['lastName']
+        first_name = ALL_STUDENT_ACCOUNTS[username]['firstName']
+        print(f"{first_name} {last_name}'s username: {username}")
+
+    sendToUser = input("Enter the username you want to send a message to or type 'exit' to go back: ")
+
+    #plus members can message anyone
+    if sendToUser == "exit":
+        return
+    elif sendToUser in friendList:
+        message = input("Enter the message you would like to send: \n")
+        MESSAGES[sendToUser] = {
+            'inbox': {
+            'sender': username,
+            'read': False,
+            'message': message,
+            }
+        }
+        print("Message sent\n")
+        return
+    else:
+        print("Invalid input try again\n")
+        messagePlus(username)
+
 
 # function for when the user is logged in
 def loggedinScreen(username):
@@ -1229,6 +1347,9 @@ def loggedinScreen(username):
 
     if ALL_STUDENT_ACCOUNTS[username]['requests'] is not None:
         print("\nYou have pending friend requests! Go to Show my network to view")
+    if MESSAGES[username] is not None:
+        print("\nYou have messages in your inbox, go to 'View Inbox' to view it")
+
     # other submenu would go here
     print(" ")
     print("1. Search for a job")
@@ -1240,9 +1361,12 @@ def loggedinScreen(username):
     print("7. View/Edit profiles")
     print("8. Delete a job")
     print("9. log out")
+    print("10. Message Friends")
+    print("11. View Inbox")
+    print("12. Message (Plus account only)")
 
     # User choose an option
-    userChoice = input("Select an option with '1', through '9': ")
+    userChoice = input("Select an option with '1', through '12': ")
 
     # Option menu:
     if userChoice == '1':
@@ -1273,8 +1397,17 @@ def loggedinScreen(username):
         print("\nYou have successfully logged out\n")
         globalUsername = None
         return
+    elif userChoice == '10':
+        sendMessage(username)
+        loggedinScreen(username)
+    elif userChoice == '11':
+        viewInbox(username)
+        loggedinScreen(username)
+    elif userChoice == '12':
+        messagePlus(username)
+        loggedinScreen(username)
     else:
-        print("Invalid. Please choose a valid option of either '1', through '8'.\n")
+        print("Invalid. Please choose a valid option of either '1', through '12'.\n")
         loggedinScreen(username)
 
 
