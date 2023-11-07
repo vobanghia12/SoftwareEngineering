@@ -70,8 +70,19 @@ def createAccount():
         billing_status = 'Active'  # Plus members are billed $10/month
         # Implement billing logic here to charge $10 from the student's account
 
+    # keep track of current number of jobs posted and users for notifications
+    numUsers = 0
+    numJobs = 0
+    for job in ALL_JOBS:
+        numJobs += 1
+
+    for user in ALL_STUDENT_ACCOUNTS:
+        numUsers += 1
+
+
     # Key is the username, values are password, firstName, lastName, university, major, Language
     # also holds booleans for SMS, Email and Advertising, as well as lists for friends and friend requests
+    # numJobs and numUsers are personal trackers to help display notifications of new jobs and users
     ALL_STUDENT_ACCOUNTS[username] = {
         'password': password,
         'firstName': firstName,
@@ -86,6 +97,8 @@ def createAccount():
         'Advertising': True,
         'friends': [],
         'requests': [],
+        'numJobs': numJobs,
+        'numUsers': numUsers,
     }
 
     print("Account has been created!\n")
@@ -1371,6 +1384,20 @@ def loggedinScreen(username):
         print("Don't forget to create a profile\n")
     if MESSAGES[username] is not None:
         print("\nYou have messages waiting for you")
+    if globalUsername in ALL_APPLICANT_DELETED_JOBS:
+        for job in ALL_APPLICANT_DELETED_JOBS.keys():
+            if globalUsername in ALL_APPLICANT_DELETED_JOBS[job]:
+                print(f"The job: {job} that you applied for has been deleted")
+    if len(ALL_JOBS) > ALL_STUDENT_ACCOUNTS[username]['numJobs']:
+        print("A new job has been posted")
+        ALL_STUDENT_ACCOUNTS[username]['numJobs'] = len(ALL_JOBS)
+    if len(ALL_STUDENT_ACCOUNTS) > ALL_STUDENT_ACCOUNTS[username]['numUsers']:
+        numNewUsers = len(ALL_STUDENT_ACCOUNTS) - ALL_STUDENT_ACCOUNTS[username]['numUsers']
+        newUsers = list(ALL_STUDENT_ACCOUNTS.keys())[-numNewUsers:]
+        for user in newUsers:
+            print(f"{ALL_STUDENT_ACCOUNTS[user]['firstName']} has joined inCollege!")
+        ALL_STUDENT_ACCOUNTS[username]['numUsers'] = len(ALL_STUDENT_ACCOUNTS)
+    
 
     # other submenu would go here
     print(" ")
