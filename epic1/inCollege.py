@@ -381,7 +381,7 @@ def jobSearch():
         applicants = ALL_JOBS[title]['applicants']
         if globalUsername in applicants:
             numberOfAppliedJobs += 1
-    
+
     if numberOfAppliedJobs == 0:
         print(f"You have currently applied for {numberOfAppliedJobs} jobs")
 
@@ -389,7 +389,7 @@ def jobSearch():
     print("2. Post a job/internship")
     print("3. Return to main menu")
 
-    
+
     # User choose an option
     userChoice = input("Select an option with '1', '2', or '3': ")
 
@@ -1355,14 +1355,8 @@ def messagePlus(username): #function for plus member messaging
         messagePlus(username)
 
 
-# function for when the user is logged in
-def loggedinScreen(username):
-
-
-    # set isLoggedIn Boolean to true
-    globalUsername = username
-
-    #notifications
+def notification(username):
+     #notifications
     if numberOfDays > 7:
         print("Remember - you're going to want to have a job when you graduate. Make sure that you start to apply for jobs today!\n")
     if ALL_STUDENT_ACCOUNTS[username]['requests'] is not None:
@@ -1371,6 +1365,16 @@ def loggedinScreen(username):
         print("Don't forget to create a profile\n")
     if MESSAGES[username] is not None:
         print("\nYou have messages waiting for you")
+
+
+# function for when the user is logged in
+def loggedinScreen(username):
+
+
+    # set isLoggedIn Boolean to true
+    globalUsername = username
+
+    notification(username)
 
     # other submenu would go here
     print(" ")
@@ -1418,8 +1422,8 @@ def loggedinScreen(username):
     elif userChoice == '9':
         print("\nYou have successfully logged out\n")
         # when they log off assume a day has passed
-        global numberOfDays
-        numberOfDays += 1
+        # global numberOfDays
+        # numberOfDays += 1
         globalUsername = None
         return
     elif userChoice == '10':
