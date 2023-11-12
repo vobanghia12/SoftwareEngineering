@@ -394,7 +394,7 @@ def jobSearch():
         applicants = ALL_JOBS[title]['applicants']
         if globalUsername in applicants:
             numberOfAppliedJobs += 1
-    
+
     if numberOfAppliedJobs == 0:
         print(f"You have currently applied for {numberOfAppliedJobs} jobs")
 
@@ -402,7 +402,7 @@ def jobSearch():
     print("2. Post a job/internship")
     print("3. Return to main menu")
 
-    
+
     # User choose an option
     userChoice = input("Select an option with '1', '2', or '3': ")
 
@@ -1367,15 +1367,8 @@ def messagePlus(username): #function for plus member messaging
         print("Invalid input try again\n")
         messagePlus(username)
 
-
-# function for when the user is logged in
-def loggedinScreen(username):
-    
-    global numberOfDays
-    # set isLoggedIn Boolean to true
-    globalUsername = username
-
-    #notifications
+def notification(username):
+     #notifications
     if numberOfDays > 7:
         print("Remember - you're going to want to have a job when you graduate. Make sure that you start to apply for jobs today!\n")
     if ALL_STUDENT_ACCOUNTS[username]['requests'] is not None:
@@ -1384,6 +1377,17 @@ def loggedinScreen(username):
         print("Don't forget to create a profile\n")
     if MESSAGES[username] is not None:
         print("\nYou have messages waiting for you")
+
+
+# function for when the user is logged in
+def loggedinScreen(username):
+
+    global numberOfDays
+    # set isLoggedIn Boolean to true
+    globalUsername = username
+
+    #notifications
+    notification(username)
     if globalUsername in ALL_APPLICANT_DELETED_JOBS:
         for job in ALL_APPLICANT_DELETED_JOBS.keys():
             if globalUsername in ALL_APPLICANT_DELETED_JOBS[job]:
@@ -1398,7 +1402,7 @@ def loggedinScreen(username):
         for user in newUsers:
             print(f"{ALL_STUDENT_ACCOUNTS[user]['firstName']} has joined inCollege!")
         ALL_STUDENT_ACCOUNTS[username]['numUsers'] = len(ALL_STUDENT_ACCOUNTS)
-    
+
 
     # other submenu would go here
     print(" ")

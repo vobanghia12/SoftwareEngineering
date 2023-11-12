@@ -495,6 +495,18 @@ def testMessagePlusWithPlusMembership(self, mock_input):
         inCollege.messagePlus('wyoming55')
     self.assertIn(expected_output, out.getvalue().strip())
 
+#Test notification function
+    @patch('inCollege.numberOfDays', 8)
+    @patch('inCollege.ALL_PROFILES', {'wyoming55': {'job_title': ['Test Job'], 'job_employer': ['Test Employer'], 'job_date_start': ['Test Date Start'], 'job_date_end': ['Test Date End'], 'job_location': ['Test Location'], 'job_description': ['Test Description']}})
+    @patch('inCollege.MESSAGES', {'wyoming55': {'inbox': [{'sender': 'wyoming55', 'message': 'Hello Buddy', 'read' : False, 'sender' : "wyoming55"}]}})
+    @patch('inCollege.ALL_STUDENT_ACCOUNTS',  {"wyoming44":{'university':"SJSU","lastName":"Vo", "firstName":"Jason", "major":"CS", 'requests': []}, "wyoming55":{'university':"SJSU","lastName":"Tran", "firstName":"Kevin", "major":"CS", 'requests': [], 'friends' : ['wyoming44'] }})
+    def test_notification(self):
+        expected_output = "You have pending friend requests! Go to Show my network to view"
+        out = io.StringIO()
+        with redirect_stdout(out):
+            inCollege.notification("wyoming55")
+        self.assertIn(expected_output, out.getvalue().strip())
+
 
 
 
