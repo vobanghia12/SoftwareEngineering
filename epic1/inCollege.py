@@ -1370,8 +1370,8 @@ def messagePlus(username): #function for plus member messaging
 
 # function for when the user is logged in
 def loggedinScreen(username):
-
-
+    
+    global numberOfDays
     # set isLoggedIn Boolean to true
     globalUsername = username
 
@@ -1445,7 +1445,6 @@ def loggedinScreen(username):
     elif userChoice == '9':
         print("\nYou have successfully logged out\n")
         # when they log off assume a day has passed
-        global numberOfDays
         numberOfDays += 1
         globalUsername = None
         return
