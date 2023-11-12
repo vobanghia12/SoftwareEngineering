@@ -19,6 +19,7 @@ searchList = []
 
 friendList = []
 
+numberOfDays = 0
 
 # function for creating an account
 def createAccount():
@@ -69,8 +70,19 @@ def createAccount():
         billing_status = 'Active'  # Plus members are billed $10/month
         # Implement billing logic here to charge $10 from the student's account
 
+    # keep track of current number of jobs posted and users for notifications
+    numUsers = 0
+    numJobs = 0
+    for job in ALL_JOBS:
+        numJobs += 1
+
+    for user in ALL_STUDENT_ACCOUNTS:
+        numUsers += 1
+
+
     # Key is the username, values are password, firstName, lastName, university, major, Language
     # also holds booleans for SMS, Email and Advertising, as well as lists for friends and friend requests
+    # numJobs and numUsers are personal trackers to help display notifications of new jobs and users
     ALL_STUDENT_ACCOUNTS[username] = {
         'password': password,
         'firstName': firstName,
@@ -85,6 +97,8 @@ def createAccount():
         'Advertising': True,
         'friends': [],
         'requests': [],
+        'numJobs': numJobs,
+        'numUsers': numUsers,
     }
 
     print("Account has been created!\n")
@@ -201,6 +215,8 @@ def applyJob():
         paragraph = input("Enter a paragraph explaining why you are a good fit for the job: ")
         ALL_JOBS[jobTitle]['applications'].add((globalUsername, graduationDate, startDate, paragraph))
         print("You have successfully applied to the job")
+        global numberOfDays
+        numberOfDays = 0
         return
 
 def saveJob():
@@ -371,9 +387,21 @@ def jobSearch():
     if globalUsername in ALL_APPLICANT_DELETED_JOBS:
         print("A job you have applied to has been deleted")
 
+    #checks how many jobs have been applied
+    numberOfAppliedJobs = 0
+
+    for title in ALL_JOBS:
+        applicants = ALL_JOBS[title]['applicants']
+        if globalUsername in applicants:
+            numberOfAppliedJobs += 1
+
+    if numberOfAppliedJobs == 0:
+        print(f"You have currently applied for {numberOfAppliedJobs} jobs")
+
     print("1. Search for a job/internship")
     print("2. Post a job/internship")
     print("3. Return to main menu")
+
 
     # User choose an option
     userChoice = input("Select an option with '1', '2', or '3': ")
@@ -1339,16 +1367,42 @@ def messagePlus(username): #function for plus member messaging
         print("Invalid input try again\n")
         messagePlus(username)
 
+def notification(username):
+     #notifications
+    if numberOfDays > 7:
+        print("Remember - you're going to want to have a job when you graduate. Make sure that you start to apply for jobs today!\n")
+    if ALL_STUDENT_ACCOUNTS[username]['requests'] is not None:
+        print("You have pending friend requests! Go to Show my network to view\n")
+    if ALL_PROFILES[username] is None:
+        print("Don't forget to create a profile\n")
+    if MESSAGES[username] is not None:
+        print("\nYou have messages waiting for you")
+
 
 # function for when the user is logged in
 def loggedinScreen(username):
+
+    global numberOfDays
     # set isLoggedIn Boolean to true
     globalUsername = username
 
-    if ALL_STUDENT_ACCOUNTS[username]['requests'] is not None:
-        print("\nYou have pending friend requests! Go to Show my network to view")
-    if MESSAGES[username] is not None:
-        print("\nYou have messages in your inbox, go to 'View Inbox' to view it")
+    #notifications
+    notification(username)
+    if globalUsername in ALL_APPLICANT_DELETED_JOBS:
+        for job in ALL_APPLICANT_DELETED_JOBS.keys():
+            if globalUsername in ALL_APPLICANT_DELETED_JOBS[job]:
+                print(f"The job: {job} that you applied for has been deleted")
+    if len(ALL_JOBS) > ALL_STUDENT_ACCOUNTS[username]['numJobs']:
+        new_job = list(ALL_JOBS)[-1]
+        print(f"A new job: {new_job} has been posted")
+        ALL_STUDENT_ACCOUNTS[username]['numJobs'] = len(ALL_JOBS)
+    if len(ALL_STUDENT_ACCOUNTS) > ALL_STUDENT_ACCOUNTS[username]['numUsers']:
+        numNewUsers = len(ALL_STUDENT_ACCOUNTS) - ALL_STUDENT_ACCOUNTS[username]['numUsers']
+        newUsers = list(ALL_STUDENT_ACCOUNTS.keys())[-numNewUsers:]
+        for user in newUsers:
+            print(f"{ALL_STUDENT_ACCOUNTS[user]['firstName']} has joined inCollege!")
+        ALL_STUDENT_ACCOUNTS[username]['numUsers'] = len(ALL_STUDENT_ACCOUNTS)
+
 
     # other submenu would go here
     print(" ")
@@ -1395,6 +1449,8 @@ def loggedinScreen(username):
         loggedinScreen(username)
     elif userChoice == '9':
         print("\nYou have successfully logged out\n")
+        # when they log off assume a day has passed
+        numberOfDays += 1
         globalUsername = None
         return
     elif userChoice == '10':
