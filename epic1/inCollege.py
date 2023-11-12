@@ -1389,7 +1389,8 @@ def loggedinScreen(username):
             if globalUsername in ALL_APPLICANT_DELETED_JOBS[job]:
                 print(f"The job: {job} that you applied for has been deleted")
     if len(ALL_JOBS) > ALL_STUDENT_ACCOUNTS[username]['numJobs']:
-        print("A new job has been posted")
+        new_job = list(ALL_JOBS)[-1]
+        print(f"A new job: {new_job} has been posted")
         ALL_STUDENT_ACCOUNTS[username]['numJobs'] = len(ALL_JOBS)
     if len(ALL_STUDENT_ACCOUNTS) > ALL_STUDENT_ACCOUNTS[username]['numUsers']:
         numNewUsers = len(ALL_STUDENT_ACCOUNTS) - ALL_STUDENT_ACCOUNTS[username]['numUsers']

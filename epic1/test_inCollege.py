@@ -495,8 +495,80 @@ def testMessagePlusWithPlusMembership(self, mock_input):
         inCollege.messagePlus('wyoming55')
     self.assertIn(expected_output, out.getvalue().strip())
 
+#Epic 8 test cases
+#Test cases for notifying the number of jobs applied
+@patch('inCollege.globalUsername', 'wyoming55')
+@patch('inCollege.ALL_APPLICANT_DELETED_JOBS', {'wyoming55': True})
+@patch('inCollege.ALL_JOBS', {'Job1': {'applicants': ['wyoming55', 'user2']}, 'Job2': {'applicants': ['wyoming55']}})
+@patch('builtins.input', side_effect=['1', '3'])
+def testJobSearchWithAppliedJobs(self, mock_input):
+    expected_output = "You have currently applied for 2 jobs"
+    out = io.StringIO()
+    with redirect_stdout(out):
+        inCollege.jobSearch()
+    self.assertIn(expected_output, out.getvalue().strip())
 
+@patch('inCollege.globalUsername', 'wyoming55')
+@patch('inCollege.ALL_APPLICANT_DELETED_JOBS', {'wyoming55': False})
+@patch('inCollege.ALL_JOBS', {'Job1': {'applicants': ['user2']}, 'Job2': {'applicants': ['user3']}})
+@patch('builtins.input', side_effect=['1', '3'])
+def testJobSearchWithoutAppliedJobs(self, mock_input):
+    expected_output = "You have currently applied for 0 jobs"
+    out = io.StringIO()
+    with redirect_stdout(out):
+        inCollege.jobSearch()
+    self.assertIn(expected_output, out.getvalue().strip())
 
+#test case to notify a new job has been posted
+@patch('inCollege.globalUsername', 'wyoming55')
+@patch('inCollege.ALL_JOBS', {'Job1': {'applicants': ['user2']}, 'Job2': {'applicants': ['user3']}})
+@patch('inCollege.ALL_STUDENT_ACCOUNTS', {'wyoming55': {'numJobs': 0}})
+@patch('builtins.input', side_effect=['1', '9'])
+def testNotificationForNewJobPosted(self, mock_input):
+    expected_output = "A new job: Job2 has been posted"
+    out = io.StringIO()
+    with redirect_stdout(out):
+        inCollege.loggedinScreen('wyoming55')
+    self.assertIn(expected_output, out.getvalue().strip())
+
+# Test case for the notification about not applying for a job in the past 7 days
+@patch('inCollege.globalUsername', 'wyoming55')
+@patch('inCollege.numberOfDays', 8)  # Simulate more than 7 days passing
+@patch('inCollege.ALL_JOBS', {'Job1': {'applicants': ['user2']}})
+@patch('inCollege.ALL_STUDENT_ACCOUNTS', {'wyoming55': {'numJobs': 1}})
+@patch('builtins.input', side_effect=['1', '9'])
+def testNotificationForNotApplyingInPast7Days(self, mock_input):
+    expected_output = "Remember - you're going to want to have a job when you graduate. Make sure that you start to apply for jobs today!"
+    out = io.StringIO()
+    with redirect_stdout(out):
+        inCollege.loggedinScreen('wyoming55')
+    self.assertIn(expected_output, out.getvalue().strip())
+
+# Test case for the notification about a new user joining InCollege
+@patch('inCollege.globalUsername', 'existing_user')
+@patch('inCollege.numberOfDays', 1)
+@patch('inCollege.ALL_STUDENT_ACCOUNTS', {'existing_user': {'numUsers': 1, 'firstName': 'John', 'lastName': 'Doe'},
+                                             'new_user': {'numUsers': 0, 'firstName': 'Jane', 'lastName': 'Doe'}})
+@patch('builtins.input', side_effect=['6', '9'])
+def testNotificationForNewUserJoined(self, mock_input):
+    expected_output = "Jane Doe has joined inCollege!"
+    out = io.StringIO()
+    with redirect_stdout(out):
+        inCollege.loggedinScreen('existing_user')
+    self.assertIn(expected_output, out.getvalue().strip())
+
+# Test case for the notification about a deleted job
+@patch('inCollege.globalUsername', 'wyoming55')
+@patch('inCollege.ALL_APPLICANT_DELETED_JOBS', {'Job1': ['wyoming55'], 'Job2': ['user2']})
+@patch('inCollege.ALL_JOBS', {'Job1': {'applicants': ['wyoming55']}, 'Job2': {'applicants': ['user2']}})
+@patch('inCollege.ALL_STUDENT_ACCOUNTS', {'wyoming55': {'numJobs': 0}})
+@patch('builtins.input', side_effect=['1', '9'])
+def testNotificationForDeletedJob(self, mock_input):
+    expected_output = "The job: Job1 that you applied for has been deleted"
+    out = io.StringIO()
+    with redirect_stdout(out):
+        inCollege.loggedinScreen('wyoming55')
+    self.assertIn(expected_output, out.getvalue().strip())
 
 if __name__ == '__main__':
     unittest.main()
