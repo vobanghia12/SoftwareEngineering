@@ -1331,7 +1331,7 @@ def viewInbox(username):
 
 def messagePlus(username): #function for plus member messaging
     #check if the user is a plus member
-    if ALL_STUDENT_ACCOUNTS[username]['plus'] == False:
+    if ALL_STUDENT_ACCOUNTS[username]['membership_tier'] != 'Plus':
         print("You are not a plus member, you cannot message people\n")
         return
 
@@ -1342,7 +1342,7 @@ def messagePlus(username): #function for plus member messaging
         friendList.append(student)
 
     #printing out friends
-    for username in enumerate(friendList):
+    for username in friendList:
         last_name = ALL_STUDENT_ACCOUNTS[username]['lastName']
         first_name = ALL_STUDENT_ACCOUNTS[username]['firstName']
         print(f"{first_name} {last_name}'s username: {username}")
@@ -1504,3 +1504,4 @@ def initialScreen():
 # call main
 if __name__ == '__main__':
     initialScreen()
+
