@@ -1373,9 +1373,9 @@ def notification(username):
         print("Remember - you're going to want to have a job when you graduate. Make sure that you start to apply for jobs today!\n")
     if ALL_STUDENT_ACCOUNTS[username]['requests'] is not None:
         print("You have pending friend requests! Go to Show my network to view\n")
-    if ALL_PROFILES[username] is None:
+    if username not in ALL_PROFILES.keys():
         print("Don't forget to create a profile\n")
-    if MESSAGES[username] is not None:
+    if username not in MESSAGES.keys():
         print("\nYou have messages waiting for you")
 
 
@@ -1384,6 +1384,7 @@ def loggedinScreen(username):
 
     global numberOfDays
     # set isLoggedIn Boolean to true
+    global globalUsername 
     globalUsername = username
 
     #notifications
@@ -1503,4 +1504,3 @@ def initialScreen():
 # call main
 if __name__ == '__main__':
     initialScreen()
-
