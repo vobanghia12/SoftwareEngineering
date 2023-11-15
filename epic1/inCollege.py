@@ -809,7 +809,7 @@ def showMyNetwork():
                 f'{requester_firstName} {requester_lastName} from {requester_university} has sent you a friend request')
 
             requestChoice = input("Enter 1 to accept the request or 2 to deny: ")
-            while requestChoice != '1' or requestChoice != '2':
+            while requestChoice != '1' and requestChoice != '2':
                 requestChoice = input("Invalid input, Enter 1 to accept the request or 2 to deny: ")
 
             if requestChoice == '1':
