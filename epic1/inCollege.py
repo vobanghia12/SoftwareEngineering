@@ -280,7 +280,7 @@ def listingSearch():
                     print(f'{title}, {description}, {employer}, {location}, {salary}, {poster}, Not Applied')
 
             #prompt the user for applying for job or saving job
-            apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
+            apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit: ")
             if apply == "1":
                 applyJob()
                 listingSearch()
@@ -304,7 +304,7 @@ def listingSearch():
                 print(f'{title}, {description}, {employer}, {location}, {salary}')
 
         #prompt the user for applying for job or saving job
-        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
+        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit: ")
         if apply == "1":
             applyJob()
             listingSearch()
@@ -328,7 +328,7 @@ def listingSearch():
                 print(f'{title}, {description}, {employer}, {location}, {salary}')
 
         #prompt the user for applying for job or saving job
-        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
+        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit: ")
         if apply == "1":
             applyJob()
             listingSearch()
@@ -352,7 +352,7 @@ def listingSearch():
                 print(f'{title}, {description}, {employer}, {location}, {salary}')
 
         #prompt the user for applying for job or saving job
-        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
+        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit: ")
         if apply == "1":
             applyJob()
             listingSearch()
