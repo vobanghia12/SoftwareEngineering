@@ -280,7 +280,7 @@ def listingSearch():
                     print(f'{title}, {description}, {employer}, {location}, {salary}, {poster}, Not Applied')
 
             #prompt the user for applying for job or saving job
-            apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit: ")
+            apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
             if apply == "1":
                 applyJob()
                 listingSearch()
@@ -304,7 +304,7 @@ def listingSearch():
                 print(f'{title}, {description}, {employer}, {location}, {salary}')
 
         #prompt the user for applying for job or saving job
-        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit: ")
+        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
         if apply == "1":
             applyJob()
             listingSearch()
@@ -328,7 +328,7 @@ def listingSearch():
                 print(f'{title}, {description}, {employer}, {location}, {salary}')
 
         #prompt the user for applying for job or saving job
-        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit: ")
+        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
         if apply == "1":
             applyJob()
             listingSearch()
@@ -352,7 +352,7 @@ def listingSearch():
                 print(f'{title}, {description}, {employer}, {location}, {salary}')
 
         #prompt the user for applying for job or saving job
-        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit: ")
+        apply = input("Select '1' if you want to apply for a job, '2' to save/unsave a job, or anything else to exit")
         if apply == "1":
             applyJob()
             listingSearch()
@@ -479,6 +479,7 @@ def find():
                     # sets receivingUser to the username stored in searchList and add to users friend request list
                     receivingUser = searchList[index]
                     ALL_STUDENT_ACCOUNTS[receivingUser]['requests'].append(globalUsername)
+                    print("request sent")
                 else:
                     return
 
@@ -805,8 +806,8 @@ def showMyNetwork():
             requester_lastName = ALL_STUDENT_ACCOUNTS[requester]['lastName']
             requester_university = ALL_STUDENT_ACCOUNTS[requester]['university']
             # print details of friend request
-            print(
-                f'{requester_firstName} {requester_lastName} from {requester_university} has sent you a friend request')
+            print(f'{requester_firstName} {requester_lastName} '
+                  f'from {requester_university} has sent you a friend request')
 
             requestChoice = input("Enter 1 to accept the request or 2 to deny: ")
             while requestChoice != '1' and requestChoice != '2':
@@ -874,14 +875,15 @@ def viewFriendsProfiles():
     # create list to add friends into
     friendList = []
 
-    if not friendList:
-        print("You have not added any friends yet")
-        return
+
 
     for friend in ALL_STUDENT_ACCOUNTS[globalUsername]['friends']:
         friendList.append(friend)
     # true if friendList is empty
 
+    if not friendList:
+        print("You have not added any friends yet")
+        return
 
     # if user has friends
     if friendList:
@@ -916,7 +918,7 @@ def viewFriendsProfiles():
                     print(f"Education: {ALL_PROFILES[friend_username]['education']}")
 
                     # use for loop to print each job
-                    for i in range(len(ALL_PROFILES[globalUsername]['job_title'])):
+                    for i in range(len(ALL_PROFILES[friend_username]['job_title'])):
                     # variable to store job number
                         x = i
                         n = i + 1
